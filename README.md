@@ -6,6 +6,7 @@
 function that allows you to post [Slack](https://slack.com/) notifications
 
 ## Features
+
 * Severity levels expressed by colors:
   * Info: green;
   * Warning: yellow;
@@ -14,6 +15,7 @@ function that allows you to post [Slack](https://slack.com/) notifications
 * Integration with [AWS KMS](https://aws.amazon.com/kms/).
 * Random quotes from movies and games to add a bit of fun.
 * A name and avatar are configurable.
+* Deployable with terraform.
 
 ## Building a project
 
