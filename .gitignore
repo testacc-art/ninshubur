@@ -3,3 +3,6 @@
 
 # Node
 node_modules/
+
+# Sensitive data
+deploy.env
