@@ -4,13 +4,11 @@ jobs:
     language: node_js
     node_js: node
     install:
-      - npm ci
+    - npm ci
     script:
-      - npm test
+    - npm test
 notifications:
+  email: false
   slack:
     rooms:
-      secure: Tleano7ihbgQ79dlJJSfkwpf7KJxUU0c51yS0KeDrrnpRE67HiMhM8Un8HDlMyz5gNrXqfyxyhimvJ2SgA9IGzVB/Fhs/yzqw6ctJzfozqhBiy16+2PI/d22MPL++uWkxLwAaEUkcyjjPlfrbrnGBLVrjH3MuHzfeB8a1WqWgq7oFUPRRZqBvbqi6LN9ry0pM3DzeSGbvMu7VAIb+n+ItuA14RvECNSHMzqAz7JPib2SP4uJ4otqa1n4xvMuTUUBLgNDoRRWE/KQdwlNQcP6xyrxyYp3z5IvQlrNvC9q9+sa2I5sTsH1uZc/FXfynAnRUVXJoIFDH+aF4v1njIEmtAY6D3ooembJcWsku5noFLuEhMeWY2Ar8U4nrgvCcp65ZI/IhhOrScg5PD9ErPzLWeUAfD5hI9wvxSnCcX2nn7N6UAQc/h2MWm+sLyVRT5Ck5rTof0sl2r2sv9lNRURi4zSNJcERzOe6BFDpIzfF13AXcMGb87H+EFnwBE/2UE9makEabGJCAjQ9byDy7owiK1EGOV9ZKYNoRZcFscC0pvZLSRvdpCyzvKFX69d2eT25Rk8Qaejyb40NJ998usWpwHKU3TqJYUm+JSD2BPpsLjI9nOstNkNutHvyKzgO7lvgykcaOjYVFGjV16xCJPqMtfV4nBjlH5ZAnRr0ubkeNTI=
-    on_success: change
-    on_failure: change
-  email: false
+      secure: kAszcx7PQQUdEP9F/hFql9IAiOlXCwEFJksfs+JLvB5z+67GT0CuDZsE1xhQlm27vBbD9bSL1AUEpeFdpV7q05PrzfNXpi1odT4wB9yRgHmy73ToX2E2KARp5+m1zRlpSmCy1mTpBIguG04q0FP+qaCZlsass8uhIY2g6YyQ+OzWrlOXHn3P3AMXjIWhK9qxEVzKLxSeYfUhnUbKBwYT/5x4gbbA+HLvCZKrU0y62CSNSj7tFyebucaS6rGcf3DuYGSOvVXcP+safklTZFQYl0BntEjyB6BET7ivRoM3y7Z3SLVFP7B/Obd+PkUxV43GvP6EDkyRuk9Nt281m6XKGCUW/el+SIWHZkHW1uiy3D2nWQKcbUQ+VxfNRIRZWNJWIUyDtIJws6mAjnskyM5IwKs89mG4KE9tVjR7bFoYjS9BecyV6b+IOJ/HjCNlNIhEXPvpaYnCo23Qnn5mJNUGMWyN/ltqBvNsOv+6vOutjaS0VNlqQv5syEIIoLt7yjcRl0MIVbImB8VLcgLrailMoVhW1PAuLQfap0nqEs8mB3wzVNklZmNrYB0DHxoQ+qQ8tjsZP/Qve+chSVp86kyqPkFo7VAa3v96t3wv9zYsfr+n47xWh83lNZvUZzUFct36iE7nOgIU6VArPLZuy//mNGNp48wQ6fA5O48u1FFnJs0=
