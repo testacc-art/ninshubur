@@ -1,3 +1,7 @@
-describe('index', () => {
-    it('stub', done => done())
+const index = require('./index')
+
+describe('Main', () => {
+    it('resolves', async () => {
+        await expect(index.handler()).resolves.toBe('done')
+    })
 })

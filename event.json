@@ -1,0 +1,6 @@
+{
+  "project": "Delivery Service",
+  "environment": "Staging",
+  "level": "info",
+  "event": "Test"
+}

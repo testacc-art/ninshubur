@@ -20,3 +20,5 @@ function that allows you to post [Slack](https://slack.com/) notifications
 ## Building a project
 
 * Install dependencies: `npm install`
+* Test: `npm test`
+* E2E test: `npm run e2e`
