@@ -1,7 +1,7 @@
 {
   "name": "ninshubur",
   "dependencies": {
-    "aws-sdk": "^2.678.0"
+    "aws-sdk": "^2.682.0"
   },
   "devDependencies": {
     "mocha": "^7.1.2",
