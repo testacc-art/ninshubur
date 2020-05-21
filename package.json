@@ -1,5 +1,12 @@
 {
   "name": "ninshubur",
+  "description": "Delivers your messages. With a twist.",
+  "author": "Kirill Artamonov",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/artamonovkirill/ninshubur"
+  },
   "dependencies": {
     "aws-sdk": "^2.682.0"
   },
@@ -9,5 +16,6 @@
   },
   "scripts": {
     "test": "mocha *.spec.ts"
-  }
+  },
+  "license": "Apache License Version 2.0"
 }
