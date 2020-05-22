@@ -1,12 +1,17 @@
 jobs:
   include:
-  - stage: Publish
+  - stage: test
     language: node_js
     node_js: node
     install:
     - npm ci
     script:
     - npm test
+  - stage: package
+    provider: script
+    script: zip -rj ninshubur.zip src/
+    on:
+      branch: master
 notifications:
   email: false
   slack:
