@@ -17,7 +17,7 @@
   },
   "scripts": {
     "test": "jest *.spec.js",
-    "e2e": "node-lambda run --configFile deploy.env"
+    "e2e": "node-lambda run --configFile e2e/deploy.env"
   },
   "license": "Apache License Version 2.0"
 }

@@ -5,4 +5,4 @@
 node_modules/
 
 # Sensitive data
-deploy.env
+e2e/deploy.env
