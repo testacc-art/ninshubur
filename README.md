@@ -19,6 +19,20 @@ function that allows you to post [Slack](https://slack.com/) notifications
 
 ## Building a project
 
-* Install dependencies: `npm install`
-* Test: `npm test`
-* E2E test: `npm run e2e`
+### Install dependencies
+```bash
+npm install
+```
+
+### Test
+```bash
+npm test
+```
+
+### E2E test
+
+E2E test is performed with [node-lambda](https://github.com/motdotla/node-lambda).
+
+* Create `e2e/deploy.env`
+* Put `SLACK_HOOK=...` in `e2e/deploy.env` 
+* Run `npm run e2e`
