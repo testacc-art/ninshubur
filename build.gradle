@@ -12,6 +12,11 @@ subprojects {
     test {
         useJUnitPlatform()
         outputs.upToDateWhen { false }
+        testLogging {
+            showStandardStreams true
+            events 'FAILED'
+            exceptionFormat 'full'
+        }
     }
 }
 
