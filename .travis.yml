@@ -6,7 +6,10 @@ jobs:
     install:
     - npm ci
     script:
-    - npm test
+    - npm run jest
+  - language: java
+    jdk: openjdk14
+    script: ./gradlew build --no-daemon --max-workers 2
   - stage: package
     provider: script
     script: zip -rj ninshubur.zip src/

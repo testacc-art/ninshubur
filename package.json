@@ -16,8 +16,9 @@
     "nock": "^12.0.3"
   },
   "scripts": {
-    "test": "jest *.spec.js",
-    "e2e": "node-lambda run --configFile e2e/deploy.env"
+    "jest": "jest src/*.spec.js",
+    "test": "npm run jest && ./gradlew build",
+    "e2e": "node-lambda run --configFile e2e/node-lambda/deploy.env"
   },
   "license": "Apache License Version 2.0"
 }

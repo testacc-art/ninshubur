@@ -5,4 +5,14 @@
 node_modules/
 
 # Sensitive data
-e2e/deploy.env
+e2e/node-lambda/deploy.env
+
+# Terraform
+.terraform/
+
+# Build artifacts
+ninshubur.zip
+
+# Gradle
+.gradle/
+build/

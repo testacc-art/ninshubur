@@ -1,0 +1,6 @@
+dependencies {
+    testImplementation group: 'org.spockframework', name: 'spock-core', version: '2.0-M2-groovy-3.0'
+    testImplementation group: 'org.testcontainers', name: 'localstack', version: '1.14.2'
+    testImplementation group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.11.789'
+    testImplementation group: 'software.amazon.awssdk', name: 's3', version: '2.13.23'
+}
