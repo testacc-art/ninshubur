@@ -6,7 +6,7 @@ zip=/tmp/terraform.zip
 
 latest_version=$(curl -fs https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r .current_version)
 
-current_version=$(terraform --version || '')
+command -v terraform && current_version=$(terraform --version)
 
 if [[ $current_version == *$latest_version ]]
 then
