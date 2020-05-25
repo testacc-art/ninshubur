@@ -14,7 +14,7 @@ class ModuleSpec extends Specification {
     def setup() {
         localstack.start()
         Terraform.Provider.generate(localstack, stateBucket)
-        s3 = AWS.S3.client(localstack.getEndpointOverride(S3))
+        s3 = AWS.S3.client(localstack)
     }
 
     def 'a user can create a Terraform module'() {

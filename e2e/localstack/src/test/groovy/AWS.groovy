@@ -1,13 +1,15 @@
+import org.testcontainers.containers.localstack.LocalStackContainer
+import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.s3.S3Client
 
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3
 
 class AWS {
     static class S3 {
-        static client(URI endpoint) {
+        static client(LocalStackContainer localstack) {
             S3Client
                     .builder()
-                    .endpointOverride(endpoint)
+                    .endpointOverride(localstack.getEndpointOverride(LocalStackContainer.Service.S3))
+                    .region(Region.of(localstack.region))
                     .build()
         }
     }
