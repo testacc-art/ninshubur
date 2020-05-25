@@ -9,6 +9,7 @@ jobs:
     - npm run jest
   - language: java
     jdk: openjdk14
+    services: docker
     script: ./gradlew build --no-daemon --max-workers 2
   - stage: package
     provider: script
