@@ -9,6 +9,8 @@ jobs:
   - language: java
     jdk: openjdk14
     services: docker
+    env:
+      - PATH=$PATH:$HOME/tools
     before_cache:
       - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
       - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -16,6 +18,8 @@ jobs:
       directories:
         - $HOME/.gradle/caches/
         - $HOME/.gradle/wrapper/
+        - $HOME/tools
+    install: ./ci/install_terraform.sh
     script: ./gradlew build --no-daemon --max-workers 2 --scan
   - stage: package
     provider: script
