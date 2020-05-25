@@ -3,10 +3,9 @@ jobs:
   - stage: test
     language: node_js
     node_js: node
-    install:
-    - npm ci
-    script:
-    - npm run jest
+    cache: npm
+    install: npm ci
+    script: npm run jest
   - language: java
     jdk: openjdk14
     services: docker
