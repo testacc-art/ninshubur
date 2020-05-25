@@ -16,7 +16,7 @@ jobs:
       directories:
         - $HOME/.gradle/caches/
         - $HOME/.gradle/wrapper/
-    script: ./gradlew build --no-daemon --max-workers 2
+    script: ./gradlew build --no-daemon --max-workers 2 --scan
   - stage: package
     provider: script
     script: zip -rj ninshubur.zip src/
