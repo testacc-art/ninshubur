@@ -1,8 +1,6 @@
 import org.testcontainers.containers.localstack.LocalStackContainer
 
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.IAM
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.LAMBDA
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3
+import static org.testcontainers.containers.localstack.LocalStackContainer.Service.*
 
 class Terraform {
     static class Provider {
@@ -11,22 +9,30 @@ class Terraform {
 terraform {
   backend "s3" {
     bucket = "${stateBucket}"
-    key    = "terraform.tfstate"
-    region = "${localstack.region}"
-    endpoint = "${localstack.getEndpointOverride(S3)}"
-    skip_credentials_validation = true
+    key = "terraform.tfstate"
+    
     force_path_style = true
+    
+    endpoint = "${localstack.getEndpointOverride(S3)}"
+    access_key = "${localstack.accessKey}"
+    secret_key = "${localstack.secretKey}"
+    region = "${localstack.region}"
+    skip_credentials_validation = true
   }
 }
 
 provider "aws" {
-  region = "${localstack.region}"
-  s3_force_path_style         = true
-  skip_credentials_validation = true 
   endpoints {
     iam = "${localstack.getEndpointOverride(IAM)}"
     lambda = "${localstack.getEndpointOverride(LAMBDA)}"
   }
+  
+  access_key = "${localstack.accessKey}"
+  secret_key = "${localstack.secretKey}"
+  region = "${localstack.region}"
+  skip_credentials_validation = true
+   
+  s3_force_path_style = true
 }"""
         }
     }
