@@ -1,12 +1,13 @@
-package terraform
-
 import org.testcontainers.containers.localstack.LocalStackContainer
 
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.*
+import static org.testcontainers.containers.localstack.LocalStackContainer.Service.IAM
+import static org.testcontainers.containers.localstack.LocalStackContainer.Service.LAMBDA
+import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3
 
-class Provider {
-    static generate(LocalStackContainer localstack, String stateBucket) {
-        new File('provider.tf').text = """
+class Terraform {
+    static class Provider {
+        static generate(LocalStackContainer localstack, String stateBucket) {
+            new File('provider.tf').text = """
 terraform {
   backend "s3" {
     bucket = "${stateBucket}"
@@ -27,5 +28,6 @@ provider "aws" {
     lambda = "${localstack.getEndpointOverride(LAMBDA)}"
   }
 }"""
+        }
     }
 }
