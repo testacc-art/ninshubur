@@ -1,4 +1,4 @@
-# 𒀭𒊩𒌆𒋚 (Ninshubur)
+# 𒀭𒊩𒌆𒋚 (Ninshubur) [![Build Status](https://travis-ci.org/artamonovkirill/ninshubur.svg?branch=master)](https://travis-ci.org/artamonovkirill/ninshubur)
 
 > Delivers your messages. With a twist.
 
