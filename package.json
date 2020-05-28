@@ -18,7 +18,7 @@
   "scripts": {
     "jest": "jest src/*.spec.js",
     "test": "npm run jest && ./gradlew build",
-    "e2e": "node-lambda run --configFile e2e/node-lambda/deploy.env"
+    "e2e": "node-lambda run -f e2e/node-lambda/deploy.env -x e2e/node-lambda/context.json -j e2e/node-lambda/event.json -H src/index.handler"
   },
   "license": "Apache License Version 2.0"
 }
