@@ -4,18 +4,21 @@ class Process {
     static run(String command) {
         def process = Runtime.runtime.exec(command)
 
-        join(process.inputStream, { System.out.println(it) })
-        join(process.errorStream, { System.err.println(it) })
+        def out = join(process.inputStream, { System.out.println(it) })
+        def error = join(process.errorStream, { System.err.println(it) })
 
         process.waitFor()
-        process
+        [exitValue: process.exitValue(), out: out, error: error]
     }
 
     private static join(InputStream stream, Consumer<String> logger) {
+        def logs = []
         def bufferedReader = new BufferedReader(new InputStreamReader(stream))
         String line
         while ((line = bufferedReader.readLine()) != null) {
             logger(line)
+            logs << line
         }
+        logs
     }
 }

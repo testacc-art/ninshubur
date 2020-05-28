@@ -10,6 +10,7 @@ e2e/node-lambda/deploy.env
 # Terraform
 .terraform/
 e2e/localstack/provider.tf
+e2e/localstack/main.tf
 
 # Build artifacts
 ninshubur.zip

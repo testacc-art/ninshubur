@@ -1,3 +1,9 @@
+terraform {
+  experiments = [
+    variable_validation
+  ]
+}
+
 locals {
   name = "ninshubur"
   filename = "${local.name}.zip"
@@ -5,6 +11,7 @@ locals {
 
 resource "aws_iam_role" "_" {
   name = local.name
+  tags = var.tags
 
   assume_role_policy = <<EOF
 {
@@ -32,6 +39,14 @@ resource "aws_lambda_function" "_" {
   role = aws_iam_role._.arn
 
   runtime = "nodejs12.x"
+
+  environment {
+    variables = {
+      SLACK_HOOK = var.slack_hook
+    }
+  }
+
+  tags = var.tags
 
   depends_on = [
     data.archive_file.zip
