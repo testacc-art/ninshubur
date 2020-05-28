@@ -5,6 +5,19 @@
 [Ninshubur](https://en.wikipedia.org/wiki/Ninshubur) is a [AWS Lambda](https://aws.amazon.com/lambda/) 
 function that allows you to post [Slack](https://slack.com/) notifications
 
+## NB!
+
+This is still work in progress.
+
+TODO:
+* random messages
+* fields support
+* log levels support
+* (customizable) avatar
+* (customizable) name
+* fetch lambda from S3
+* CloudWatch logs
+
 ## Features
 
 * Severity levels expressed by colors:
