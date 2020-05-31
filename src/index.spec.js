@@ -63,6 +63,24 @@ describe('Configuration', () => {
             await expect(index.handler())
                 .resolves.toBe('Successfully notified about {"text":"test"}')
         })
+
+        it('a user can override Slack host and port', async () => {
+            process.env.SLACK_HOOK = 'https://localhost:8443/hook'
+            nock('https://localhost:8443')
+                .post('/hook',
+                    {
+                        text: 'test'
+                    },
+                    {
+                        reqheaders: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                .reply(200, 'success')
+
+            await expect(index.handler())
+                .resolves.toBe('Successfully notified about {"text":"test"}')
+        })
     })
 })
 

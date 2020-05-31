@@ -14,7 +14,7 @@ variable "slack_hook" {
   description = "Slack hook (https://hooks.slack.com/services/AAAAAAAAA/AAAAAAAAA/AAAAAAAAAAAAAAAAAAAAAAAA)"
 
   validation {
-    condition     = can(regex("^https://[a-z.]+(/[a-zA-Z0-9]+)+", var.slack_hook))
+    condition     = can(regex("^https://[a-z.]+(:[0-9]+)?(/[a-zA-Z0-9]+)+", var.slack_hook))
     error_message = "Slack hook must be a valid URL."
   }
 }

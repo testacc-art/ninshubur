@@ -4,6 +4,7 @@ const hook = require('./hook')
 const options = () => hook.get().then(h => {
     return {
         method: 'POST',
+        port: h.port,
         host: h.hostname,
         path: h.pathname,
         headers: {'Content-Type': 'application/json'}

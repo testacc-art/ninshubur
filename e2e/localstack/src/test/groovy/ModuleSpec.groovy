@@ -15,7 +15,7 @@ class ModuleSpec extends Specification {
     IamClient iam
     def stateBucket = 'ninshubur'
 
-    def mock = new WireMockServer(wireMockConfig().httpsPort(443))
+    def mock = new WireMockServer(wireMockConfig().httpsPort(8443))
 
     def setup() {
         localstack.start()
@@ -29,14 +29,13 @@ class ModuleSpec extends Specification {
         iam = AWS.iam(localstack)
     }
 
-    @Ignore('Cannot bind https port on Travis CI')
     def 'a user can invoke the lambda function'() {
         given:
         mock.start()
         mock.givenThat(post(urlEqualTo('/hook'))
                 .willReturn(ok()))
         and:
-        Terraform.Module.generate(slack_hook: 'https://host.docker.internal/hook')
+        Terraform.Module.generate(slack_hook: 'https://host.docker.internal:8443/hook')
         Terraform.init()
 
         when:
