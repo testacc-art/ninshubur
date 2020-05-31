@@ -9,21 +9,18 @@ jobs:
   - language: java
     jdk: openjdk14
     before_install:
-      - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-      - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-      - sudo apt-get update
-      - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
+      - echo "$(ip -4 route list match 0/0 | awk '{print $3}')   host.docker.internal" | sudo tee -a /etc/hosts
     services: docker
     env:
-          - PATH=$PATH:$HOME/tools
+      - PATH=$PATH:$HOME/tools
     before_cache:
-          - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-          - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+      - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+      - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
     cache:
       directories:
-          - $HOME/.gradle/caches/
-          - $HOME/.gradle/wrapper/
-          - $HOME/tools
+        - $HOME/.gradle/caches/
+        - $HOME/.gradle/wrapper/
+        - $HOME/tools
     install: ./ci/install_terraform.sh
     script: ./gradlew build --no-daemon --max-workers 2 --scan
   - stage: package
