@@ -9,41 +9,36 @@ import software.amazon.awssdk.services.s3.S3Client
 
 import java.util.function.Supplier
 
-
 class AWS {
-    static s3(LocalStackContainer localstack) {
+    static s3(LocalStack localstack) {
         client(
                 { S3Client.builder() },
-                localstack,
-                LocalStackContainer.Service.S3)
+                localstack)
     }
 
-    static lambda(LocalStackContainer localstack) {
+    static lambda(LocalStack localstack) {
         client(
                 { LambdaClient.builder() },
-                localstack,
-                LocalStackContainer.Service.LAMBDA)
+                localstack)
     }
 
-    static iam(LocalStackContainer localstack) {
+    static iam(LocalStack localstack) {
         client(
                 { IamClient.builder() },
-                localstack,
-                LocalStackContainer.Service.IAM)
+                localstack)
     }
 
     private static <A extends AwsSyncClientBuilder<A, B>, B> B client(
             Supplier<AwsSyncClientBuilder<A, B>> supplier,
-            LocalStackContainer localstack,
-            LocalStackContainer.Service service) {
+            LocalStack localstack) {
         supplier.get()
                 .credentialsProvider(credentials(localstack))
                 .region(Region.of(localstack.region))
-                .endpointOverride(localstack.getEndpointOverride(service))
+                .endpointOverride(localstack.endpoint)
                 .build()
     }
 
-    private static credentials(LocalStackContainer localstack) {
+    private static credentials(LocalStack localstack) {
         def credentials = AwsBasicCredentials.create(localstack.accessKey, localstack.secretKey)
         StaticCredentialsProvider.create(credentials)
     }

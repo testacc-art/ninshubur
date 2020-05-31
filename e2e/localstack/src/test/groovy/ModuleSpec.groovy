@@ -1,5 +1,4 @@
 import com.github.tomakehurst.wiremock.WireMockServer
-import org.testcontainers.containers.localstack.LocalStackContainer
 import software.amazon.awssdk.services.iam.IamClient
 import software.amazon.awssdk.services.lambda.LambdaClient
 import software.amazon.awssdk.services.s3.S3Client
@@ -8,12 +7,10 @@ import spock.lang.Specification
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.*
 
 class ModuleSpec extends Specification {
 
-    def localstack = new LocalStackContainer()
-            .withServices(S3, IAM, LAMBDA)
+    def localstack = new LocalStack()
     LambdaClient lambda
     IamClient iam
     def stateBucket = 'ninshubur'
@@ -71,9 +68,8 @@ class ModuleSpec extends Specification {
         apply.exitValue == 0
 
         expect:
-        /* TODO check why lambda tags are missing */
-        //  lambda.getFunction({ it.functionName('ninshubur') }).tags() == [foo: 'bar']
-        iam.listRoleTags({ it.roleName('ninshubur') }).tags().collectEntries { [(it.key()): it.value()] } == [foo: 'bar']
+        lambda.getFunction({ it.functionName('ninshubur') }).tags() == [foo: 'bar']
+        iam.listRoleTags { it.roleName('ninshubur') }.tags().collectEntries { [(it.key()): it.value()] } == [foo: 'bar']
     }
 
     def 'Slack hook must be a valid URL'() {
