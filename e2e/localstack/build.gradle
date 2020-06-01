@@ -10,4 +10,5 @@ dependencies {
     testImplementation 'software.amazon.awssdk:iam'
     testImplementation 'software.amazon.awssdk:lambda'
     testImplementation 'software.amazon.awssdk:s3'
+    testImplementation 'software.amazon.awssdk:cloudwatchlogs'
 }

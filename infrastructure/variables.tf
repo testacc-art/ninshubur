@@ -18,3 +18,8 @@ variable "slack_hook" {
     error_message = "Slack hook must be a valid URL."
   }
 }
+
+variable "region" {
+  type = string
+  description = "AWS region where Ninshubur will be deployed to"
+}

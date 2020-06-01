@@ -35,6 +35,7 @@ provider "aws" {
   endpoints {
     iam = "${localstack.endpoint}"
     lambda = "${localstack.endpoint}"
+    cloudwatchlogs = "${localstack.endpoint}"
   }
   
   access_key = "${localstack.accessKey}"
@@ -49,11 +50,12 @@ provider "aws" {
     }
 
     static class Module {
-        static generate(Map variables = [:]) {
+        static generate(Map variables = [:], String region) {
             new File('main.tf').text = """
 module "ninshubur" {
   source = "../../infrastructure"
   source_path = "../../src"
+  region = "$region"
   ${variables.collect { k, v -> "$k = ${serialize(v)}" }.join('\n  ')}
 }"""
         }

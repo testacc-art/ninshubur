@@ -13,6 +13,7 @@ class ModuleSpec extends Specification {
     def localstack = new LocalStack()
     LambdaClient lambda
     IamClient iam
+    CloudWatchLogsClient cloudWatchLogs
     def stateBucket = 'ninshubur'
 
     def mock = new WireMockServer(wireMockConfig().httpsPort(8443))
@@ -27,6 +28,7 @@ class ModuleSpec extends Specification {
 
         lambda = AWS.lambda(localstack)
         iam = AWS.iam(localstack)
+        cloudWatchLogs = AWS.cloudWatchLogs(localstack)
     }
 
     def 'a user can invoke the lambda function'() {
@@ -49,15 +51,24 @@ class ModuleSpec extends Specification {
 
         then:
         result.statusCode() == 200
+        and:
+        cloudWatchLogs('/aws/lambda/ninshubur')
+        and:
         mock.findAll(postRequestedFor(urlEqualTo('/hook')))
 
         cleanup:
         mock.stop()
     }
 
+    def cloudWatchLogs(String groupName) {
+        cloudWatchLogs.describeLogStreams { it.logGroupName(groupName) }.logStreams()
+                .collect { s -> cloudWatchLogs.getLogEvents { it.logGroupName('/aws/lambda/ninshubur').logStreamName(s.logStreamName()) }.events() }.flatten()
+    }
+
     def 'a user can tag AWS resources'() {
         given:
-        Terraform.Module.generate(tags: [foo: 'bar'], slack_hook: 'https://hooks.slack.com/hook')
+        def tags = [foo: 'bar']
+        Terraform.Module.generate(tags: tags, slack_hook: 'https://hooks.slack.com/hook', localstack.region)
         Terraform.init()
 
         when:
@@ -67,13 +78,14 @@ class ModuleSpec extends Specification {
         apply.exitValue == 0
 
         expect:
-        lambda.getFunction({ it.functionName('ninshubur') }).tags() == [foo: 'bar']
-        iam.listRoleTags { it.roleName('ninshubur') }.tags().collectEntries { [(it.key()): it.value()] } == [foo: 'bar']
+        lambda.getFunction({ it.functionName('ninshubur') }).tags() == tags
+        iam.listRoleTags { it.roleName('ninshubur') }.tags().collectEntries { [(it.key()): it.value()] } == tags
+        cloudWatchLogs.listTagsLogGroup { it.logGroupName('/aws/lambda/ninshubur') }.tags() == tags
     }
 
     def 'Slack hook must be a valid URL'() {
         given:
-        Terraform.Module.generate(slack_hook: '/hook')
+        Terraform.Module.generate(slack_hook: '/hook', localstack.region)
         Terraform.init()
 
         when:
@@ -82,25 +94,6 @@ class ModuleSpec extends Specification {
         then:
         apply.exitValue != 0
         apply.error.contains 'Slack hook must be a valid URL.'
-    }
-
-    @Ignore
-    def 'lambda execution results are persisted in CloudWatch'() {
-        Terraform.Module.generate(slack_hook: 'https://hooks.slack.com/hook')
-        Terraform.init()
-
-        when:
-        def apply = Terraform.apply()
-
-        then:
-        apply.exitValue == 0
-
-        when:
-        def result = lambda.invoke { it.functionName('ninshubur') }
-
-        then:
-        result.statusCode() == 200
-        // TODO validate CloudWatch logs are present
     }
 
     def cleanup() {

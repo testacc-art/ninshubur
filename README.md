@@ -16,7 +16,6 @@ TODO:
 * (customizable) avatar
 * (customizable) name
 * fetch lambda from S3
-* CloudWatch logs
 
 ## Features
 

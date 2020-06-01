@@ -1,8 +1,8 @@
-import org.testcontainers.containers.localstack.LocalStackContainer
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider
 import software.amazon.awssdk.awscore.client.builder.AwsSyncClientBuilder
 import software.amazon.awssdk.regions.Region
+import software.amazon.awssdk.services.cloudwatchlogs.CloudWatchLogsClient
 import software.amazon.awssdk.services.iam.IamClient
 import software.amazon.awssdk.services.lambda.LambdaClient
 import software.amazon.awssdk.services.s3.S3Client
@@ -10,21 +10,27 @@ import software.amazon.awssdk.services.s3.S3Client
 import java.util.function.Supplier
 
 class AWS {
-    static s3(LocalStack localstack) {
+    static S3Client s3(LocalStack localstack) {
         client(
                 { S3Client.builder() },
                 localstack)
     }
 
-    static lambda(LocalStack localstack) {
+    static LambdaClient lambda(LocalStack localstack) {
         client(
                 { LambdaClient.builder() },
                 localstack)
     }
 
-    static iam(LocalStack localstack) {
+    static IamClient iam(LocalStack localstack) {
         client(
                 { IamClient.builder() },
+                localstack)
+    }
+
+    static CloudWatchLogsClient cloudWatchLogs(LocalStack localstack) {
+        client(
+                { CloudWatchLogsClient.builder() },
                 localstack)
     }
 
