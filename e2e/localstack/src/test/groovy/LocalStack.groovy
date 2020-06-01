@@ -1,6 +1,8 @@
 import org.testcontainers.containers.localstack.LocalStackContainer
 
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.*
+import static org.testcontainers.containers.localstack.LocalStackContainer.Service.IAM
+import static org.testcontainers.containers.localstack.LocalStackContainer.Service.LAMBDA
+import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3
 
 class LocalStack {
     final container = new LocalStackContainer('0.11.2')

@@ -1,22 +1,19 @@
-import com.github.tomakehurst.wiremock.WireMockServer
+import software.amazon.awssdk.services.cloudwatchlogs.CloudWatchLogsClient
+import software.amazon.awssdk.services.cloudwatchlogs.model.OutputLogEvent
 import software.amazon.awssdk.services.iam.IamClient
 import software.amazon.awssdk.services.lambda.LambdaClient
 import software.amazon.awssdk.services.s3.S3Client
-import spock.lang.Ignore
 import spock.lang.Specification
-
-import static com.github.tomakehurst.wiremock.client.WireMock.*
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
+import spock.util.concurrent.PollingConditions
 
 class ModuleSpec extends Specification {
 
+    def stateBucket = 'ninshubur'
     def localstack = new LocalStack()
+
     LambdaClient lambda
     IamClient iam
     CloudWatchLogsClient cloudWatchLogs
-    def stateBucket = 'ninshubur'
-
-    def mock = new WireMockServer(wireMockConfig().httpsPort(8443))
 
     def setup() {
         localstack.start()
@@ -33,11 +30,7 @@ class ModuleSpec extends Specification {
 
     def 'a user can invoke the lambda function'() {
         given:
-        mock.start()
-        mock.givenThat(post(urlEqualTo('/hook'))
-                .willReturn(ok()))
-        and:
-        Terraform.Module.generate(slack_hook: 'https://host.docker.internal:8443/hook')
+        Terraform.Module.generate(slack_hook: 'https://httpbin.org/post', localstack.region)
         Terraform.init()
 
         when:
@@ -52,17 +45,14 @@ class ModuleSpec extends Specification {
         then:
         result.statusCode() == 200
         and:
-        cloudWatchLogs('/aws/lambda/ninshubur')
-        and:
-        mock.findAll(postRequestedFor(urlEqualTo('/hook')))
-
-        cleanup:
-        mock.stop()
+        new PollingConditions(timeout: 10).eventually {
+            cloudWatchLogs('/aws/lambda/ninshubur').find { it.message() =~ /Success./ }
+        }
     }
 
-    def cloudWatchLogs(String groupName) {
+    List<OutputLogEvent> cloudWatchLogs(String groupName) {
         cloudWatchLogs.describeLogStreams { it.logGroupName(groupName) }.logStreams()
-                .collect { s -> cloudWatchLogs.getLogEvents { it.logGroupName('/aws/lambda/ninshubur').logStreamName(s.logStreamName()) }.events() }.flatten()
+                .collectMany { s -> cloudWatchLogs.getLogEvents { it.logGroupName('/aws/lambda/ninshubur').logStreamName(s.logStreamName()) }.events() }
     }
 
     def 'a user can tag AWS resources'() {
