@@ -1,5 +1,7 @@
 # IntelliJ
-.idea/
+**.iml
+.idea/**/*.*
+!.idea/codeStyles/*.*
 
 # Node
 node_modules/
