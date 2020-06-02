@@ -8,8 +8,6 @@ jobs:
     script: npm run jest
   - language: java
     jdk: openjdk14
-    before_install:
-      - echo "$(ip -4 route list match 0/0 | awk '{print $3}')   host.docker.internal" | sudo tee -a /etc/hosts
     services: docker
     env:
       - PATH=$PATH:$HOME/tools
@@ -23,11 +21,18 @@ jobs:
         - $HOME/tools
     install: ./ci/install_terraform.sh
     script: ./gradlew build --no-daemon --max-workers 2 --scan
-  - stage: package
+  - stage: deploy
     provider: script
-    script: zip -rj ninshubur.zip src/
+    script: zip -rj lambda.zip src/
     on:
       branch: master
+    deploy:
+      provider: s3
+      access_key_id: AKIA5I2GO2UBD6ZSH2YH
+      secret_access_key:
+        secure: Rr4gE+g8DXDc2UNAfcNkM+N99FYqMejJ+ylL9B65/GFa4kTF06cAFV48VcQ01xM5NUExOAUbQzxKeF/S/mITrGrL9S4Y3wGxyLO+B2oarN860/Sgsjg2wuthiOdm//X4Ccp8nrSjC9YI0iBOO5RpA+zeQY3CzcUSFy1gfDooApIThbh5qSHMDSUquarwrrmQl/xs+UrFstoh7s9V7fKpUF2kb1MQIB7gvdhdcXFEn+t+GZPruVs4FepJNtAp+UuGmgVnx35GE07sz7eOnBy+4EeXCa56CEnoaZNQajtft25V6pcLWy58/rJAF8dANpyDYt9S3WqX7ZqlEqzKFT9hxwj37UOAqggKYxrl2ehqTdVFjTydW1B81RTO687cQI22Q+gOfQWzJRXz/3ciHNipThCcQfapU0zih7NEgJXJBz03Ce43h/7o2EFthFOoc4PFeey96hbhc1yglupsxqYfTxWkJBZuoJIQ5Vsqk/16U0zajpfLW4P2xys1mVbsgoYFtwjoK0F/8uB2Lk0TxV8Uy+u+HlNW+LK4XpaMqpHgAkcuj0B8vwNybGmbM/gU/My7u2r088TkJoC0gXemagfbUF5S74bZY9eS/vp6tbNiwreP7M3ekOS558cKjZrqWAV6KTx1fDjFyge2hNXi/ss0Owz+ziLSi5a7BoUY/ay1zmI=
+      bucket: ninshubur
+      glob: ninshubur.zip
 notifications:
   email: false
   slack:
