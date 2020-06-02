@@ -6,6 +6,8 @@ import software.amazon.awssdk.services.s3.S3Client
 import spock.lang.Specification
 import spock.util.concurrent.PollingConditions
 
+import static java.util.UUID.randomUUID
+
 class ModuleSpec extends Specification {
 
     def stateBucket = 'ninshubur'
@@ -30,7 +32,8 @@ class ModuleSpec extends Specification {
 
     def 'a user can invoke the lambda function'() {
         given:
-        Terraform.Module.generate(slack_hook: 'https://httpbin.org/post', localstack.region)
+        def hook = "https://httpbin.org/anything/${randomUUID()}"
+        Terraform.Module.generate(slack_hook: hook, localstack.region)
         Terraform.init()
 
         when:
@@ -44,9 +47,11 @@ class ModuleSpec extends Specification {
 
         then:
         result.statusCode() == 200
+        !result.functionError()
+        result.payload().asUtf8String() =~ 'Successfully notified'
         and:
         new PollingConditions(timeout: 10).eventually {
-            cloudWatchLogs('/aws/lambda/ninshubur').find { it.message() =~ /Success./ }
+            cloudWatchLogs('/aws/lambda/ninshubur').find { it.message() =~ hook }
         }
     }
 

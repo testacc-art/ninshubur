@@ -23,7 +23,6 @@ const call = async options => new Promise((resolve, reject) => {
             console.log(`Response code: ${response.statusCode}`)
             response.on('data', chunk => console.log(`Response body: ${chunk}`))
             if (response.statusCode >= 200 && response.statusCode < 300) {
-                console.log('Success.')
                 resolve(`Successfully notified about ${body}`)
             } else {
                 reject(`Slack API responded with ${response.statusCode} code`)
