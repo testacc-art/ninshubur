@@ -2,6 +2,7 @@ import software.amazon.awssdk.services.cloudwatchlogs.CloudWatchLogsClient
 import software.amazon.awssdk.services.cloudwatchlogs.model.OutputLogEvent
 import software.amazon.awssdk.services.iam.IamClient
 import software.amazon.awssdk.services.lambda.LambdaClient
+import software.amazon.awssdk.services.lambda.model.LambdaException
 import software.amazon.awssdk.services.s3.S3Client
 import spock.lang.Specification
 import spock.util.concurrent.PollingConditions
@@ -32,8 +33,7 @@ class ModuleSpec extends Specification {
 
     def 'a user can invoke the lambda function'() {
         given:
-        def hook = "https://httpbin.org/anything/${randomUUID()}"
-        Terraform.Module.generate(slack_hook: hook, localstack.region)
+        Terraform.Module.generate(slack_hook: 'https://httpbin.org/post', localstack.region)
         Terraform.init()
 
         when:
@@ -51,8 +51,28 @@ class ModuleSpec extends Specification {
         result.payload().asUtf8String() =~ 'Successfully notified'
         and:
         new PollingConditions(timeout: 10).eventually {
-            cloudWatchLogs('/aws/lambda/ninshubur').find { it.message() =~ hook }
+            cloudWatchLogs('/aws/lambda/ninshubur').find { it.message() =~ 'Response code: 200' }
         }
+    }
+
+    def 'an unsuccessful notification fails the lambda invokation'() {
+        given:
+        Terraform.Module.generate(slack_hook: 'https://httpbin.org/status/400', localstack.region)
+        Terraform.init()
+
+        when:
+        def apply = Terraform.apply()
+
+        then:
+        apply.exitValue == 0
+
+        when:
+        lambda.invoke { it.functionName('ninshubur') }
+
+        then:
+        def e = thrown LambdaException
+        e.statusCode() == 500
+        e.awsErrorDetails().errorMessage() =~ 'Slack API responded with 400 code'
     }
 
     List<OutputLogEvent> cloudWatchLogs(String groupName) {
