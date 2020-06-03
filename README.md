@@ -10,12 +10,12 @@ function that allows you to post [Slack](https://slack.com/) notifications
 This is still work in progress.
 
 TODO:
-* random messages
 * fields support
-* log levels support
+* log levels differentiation by colors
 * (customizable) avatar
 * (customizable) name
 * fetch lambda from S3
+* user mentions
 
 ## Features
 
