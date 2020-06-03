@@ -9,7 +9,13 @@ resource "aws_iam_user_policy" "_" {
   "Statement": [
     {
       "Effect": "Allow",
-      "Action": "s3:PutObject",
+      "Action": [
+        "s3:AbortMultipartUpload",
+        "s3:GetObject",
+        "s3:GetObjectAcl",
+        "s3:PutObject",
+        "s3:PutObjectAcl"
+      ],
       "Resource": "${module.eu-west-1.bucket_arn}/lambda.zip"
     }
   ]
