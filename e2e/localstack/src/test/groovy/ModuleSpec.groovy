@@ -1,3 +1,4 @@
+import software.amazon.awssdk.core.SdkBytes
 import software.amazon.awssdk.services.cloudwatchlogs.CloudWatchLogsClient
 import software.amazon.awssdk.services.cloudwatchlogs.model.OutputLogEvent
 import software.amazon.awssdk.services.iam.IamClient
@@ -6,8 +7,6 @@ import software.amazon.awssdk.services.lambda.model.LambdaException
 import software.amazon.awssdk.services.s3.S3Client
 import spock.lang.Specification
 import spock.util.concurrent.PollingConditions
-
-import static java.util.UUID.randomUUID
 
 class ModuleSpec extends Specification {
 
@@ -35,6 +34,8 @@ class ModuleSpec extends Specification {
         given:
         Terraform.Module.generate(slack_hook: 'https://httpbin.org/post', localstack.region)
         Terraform.init()
+        and:
+        def payload = SdkBytes.fromUtf8String('{"details": {"project": "Ninshubur"}}')
 
         when:
         def apply = Terraform.apply()
@@ -43,7 +44,7 @@ class ModuleSpec extends Specification {
         apply.exitValue == 0
 
         when:
-        def result = lambda.invoke { it.functionName('ninshubur') }
+        def result = lambda.invoke { it.functionName('ninshubur').payload(payload) }
 
         then:
         result.statusCode() == 200
@@ -55,10 +56,12 @@ class ModuleSpec extends Specification {
         }
     }
 
-    def 'an unsuccessful notification fails the lambda invokation'() {
+    def 'an unsuccessful notification fails the lambda invocation'() {
         given:
         Terraform.Module.generate(slack_hook: 'https://httpbin.org/status/400', localstack.region)
         Terraform.init()
+        and:
+        def payload = SdkBytes.fromUtf8String('{"details": {"project": "Ninshubur"}}')
 
         when:
         def apply = Terraform.apply()
@@ -67,7 +70,7 @@ class ModuleSpec extends Specification {
         apply.exitValue == 0
 
         when:
-        lambda.invoke { it.functionName('ninshubur') }
+        lambda.invoke { it.functionName('ninshubur').payload(payload) }
 
         then:
         def e = thrown LambdaException

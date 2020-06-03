@@ -10,12 +10,12 @@ function that allows you to post [Slack](https://slack.com/) notifications
 This is still work in progress.
 
 TODO:
-* fields support
 * log levels differentiation by colors
 * (customizable) avatar
 * (customizable) name
 * fetch lambda from S3
 * user mentions
+* extra hooks for channels
 
 ## Features
 
@@ -26,7 +26,7 @@ TODO:
   * Fatal: red with `@here` mention.
 * Integration with [AWS KMS](https://aws.amazon.com/kms/).
 * Random quotes from movies and games to add a bit of fun.
-* A name and avatar are configurable.
+* The name and avatar are configurable.
 * Deployable with terraform.
 
 ## Building a project

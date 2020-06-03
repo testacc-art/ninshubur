@@ -14,7 +14,14 @@ describe('Main', () => {
             .post('/hook',
                 {
                     text: /.+/,
-                    color: /#.+/
+                    attachments: [{
+                        color: /#.+/,
+                        fields: [{
+                            short: true,
+                            title: 'Project',
+                            value: 'Ninshubur'
+                        }]
+                    }]
                 },
                 {
                     reqheaders: {
@@ -22,8 +29,9 @@ describe('Main', () => {
                     }
                 })
             .reply(200)
+        const event = {details: {Project: 'Ninshubur'}}
 
-        await expect(index.handler({})).resolves.toMatch(/Successfully notified about .+/)
+        await expect(index.handler(event)).resolves.toMatch(/Successfully notified about .+/)
     })
 
     it('fails on 4xx responses', async () => {
@@ -37,8 +45,9 @@ describe('Main', () => {
                     }
                 })
             .reply(400, 'invalid_payload')
+        const event = {details: {Project: 'Ninshubur'}}
 
-        await expect(index.handler({})).rejects.toBe('Slack API responded with 400 code')
+        await expect(index.handler(event)).rejects.toBe('Slack API responded with 400 code')
     })
 })
 
@@ -54,7 +63,9 @@ describe('Messages', () => {
                     }
                 })
             .reply(200)
-        await expect(index.handler({})).resolves.toBeTruthy()
+        const event = {details: {Project: 'Ninshubur'}}
+
+        await expect(index.handler(event)).resolves.toBeTruthy()
     })
 
     it('info message is taken from info pool', async () => {
@@ -68,7 +79,9 @@ describe('Messages', () => {
                     }
                 })
             .reply(200)
-        await expect(index.handler({level: 'info'})).resolves.toBeTruthy()
+        const event = {level: 'info', details: {Project: 'Ninshubur'}}
+
+        await expect(index.handler(event)).resolves.toBeTruthy()
     })
 
     test.each(['error', 'warning', 'fatal'])('%s message is taken from error pool', async level => {
@@ -82,7 +95,9 @@ describe('Messages', () => {
                         }
                     })
                 .reply(200)
-        await expect(index.handler({level: level})).resolves.toBeTruthy()
+        const event = {level: level, details: {Project: 'Ninshubur'}}
+
+        await expect(index.handler(event)).resolves.toBeTruthy()
     })
 
     it('fatal message is prefixed with @here mention', async () => {
@@ -96,7 +111,9 @@ describe('Messages', () => {
                     }
                 })
             .reply(200)
-        await expect(index.handler({level: 'fatal'})).resolves.toBeTruthy()
+        const event = {level: 'fatal', details: {Project: 'Ninshubur'}}
+
+        await expect(index.handler(event)).resolves.toBeTruthy()
     })
 })
 
@@ -113,8 +130,9 @@ describe('Configuration', () => {
                         }
                     })
                 .reply(200)
+            const event = {details: {Project: 'Ninshubur'}}
 
-            await expect(index.handler({})).resolves.toBeTruthy()
+            await expect(index.handler(event)).resolves.toBeTruthy()
         })
 
         it('a user can override Slack host and port', async () => {
@@ -128,8 +146,9 @@ describe('Configuration', () => {
                         }
                     })
                 .reply(200)
+            const event = {details: {Project: 'Ninshubur'}}
 
-            await expect(index.handler({})).resolves.toBeTruthy()
+            await expect(index.handler(event)).resolves.toBeTruthy()
         })
     })
 })
@@ -137,16 +156,35 @@ describe('Configuration', () => {
 describe('Validation', () => {
     it('hook is required to be a valid URL', async () => {
         process.env.SLACK_HOOK = '/hook'
-        await expect(index.handler({})).rejects.toBe('/hook is not a valid URL')
+        const event = {details: {Project: 'Ninshubur'}}
+
+        await expect(index.handler(event)).rejects.toBe('/hook is not a valid URL')
     })
 
     it('event is required', async () => {
         process.env.SLACK_HOOK = 'https://hooks.slack.com/hook'
+
         await expect(index.handler()).rejects.toBe('Event is required')
+    })
+
+    it('details are required', async () => {
+        process.env.SLACK_HOOK = 'https://hooks.slack.com/hook'
+        const event = {}
+
+        await expect(index.handler(event)).rejects.toBe('Details are required')
+    })
+
+    it('at least one detail is required', async () => {
+        process.env.SLACK_HOOK = 'https://hooks.slack.com/hook'
+        const event = {details: {}}
+
+        await expect(index.handler(event)).rejects.toBe('At least one detail is required')
     })
 
     it('unknown log levels are rejected', async () => {
         process.env.SLACK_HOOK = 'https://hooks.slack.com/hook'
-        await expect(index.handler({level: 'foo'})).rejects.toBe("Only 'info', 'warning', 'error' and 'fatal' log levels are supported")
+        const event = {level: 'foo', details: {Project: 'Ninshubur'}}
+
+        await expect(index.handler(event)).rejects.toBe("Only 'info', 'warning', 'error' and 'fatal' log levels are supported")
     })
 })
