@@ -37,6 +37,7 @@ jobs:
       region: eu-west-1
       acl: public_read
       local_dir: archive
+      skip_cleanup: true
 notifications:
   email: false
   slack:
