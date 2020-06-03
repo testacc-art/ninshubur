@@ -13,10 +13,14 @@ resource "aws_iam_user_policy" "_" {
         "s3:AbortMultipartUpload",
         "s3:GetObject",
         "s3:GetObjectAcl",
+        "s3:ListBucket",
         "s3:PutObject",
         "s3:PutObjectAcl"
       ],
-      "Resource": "${module.eu-west-1.bucket_arn}/lambda.zip"
+      "Resource": [
+        "${module.eu-west-1.bucket_arn}",
+        "${module.eu-west-1.bucket_arn}/lambda.zip"
+      ]
     }
   ]
 }
