@@ -10,7 +10,6 @@ function that allows you to post [Slack](https://slack.com/) notifications
 This is still work in progress.
 
 TODO:
-* log levels differentiation by colors
 * (customizable) avatar
 * (customizable) name
 * fetch lambda from S3

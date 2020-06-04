@@ -2,6 +2,9 @@ const nock = require('nock')
 
 const index = require('./index')
 const messages = require('./messages')
+const colors = require('./colors')
+
+const color_names = require('color-namer')
 
 beforeEach(() => {
     delete process.env.SLACK_HOOK
@@ -105,6 +108,88 @@ describe('Messages', () => {
         nock('https://hooks.slack.com')
             .post('/hook',
                 body => /<!here> .+/.test(body.text),
+                {
+                    reqheaders: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+            .reply(200)
+        const event = {level: 'fatal', details: {Project: 'Ninshubur'}}
+
+        await expect(index.handler(event)).resolves.toBeTruthy()
+    })
+})
+
+describe('Colors', () => {
+    it('default color is info', async () => {
+        process.env.SLACK_HOOK = 'https://hooks.slack.com/hook'
+        nock('https://hooks.slack.com')
+            .post('/hook',
+                body => body.attachments.map(e => e.color).every(c => c === colors.get('info')),
+                {
+                    reqheaders: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+            .reply(200)
+        const event = {details: {Project: 'Ninshubur'}}
+
+        await expect(index.handler(event)).resolves.toBeTruthy()
+    })
+
+    it('info color is greed', async () => {
+        process.env.SLACK_HOOK = 'https://hooks.slack.com/hook'
+        nock('https://hooks.slack.com')
+            .post('/hook',
+                body => body.attachments.map(e => e.color).every(c => color_names(c).basic[0].name === 'green'),
+                {
+                    reqheaders: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+            .reply(200)
+        const event = {level: 'info', details: {Project: 'Ninshubur'}}
+
+        await expect(index.handler(event)).resolves.toBeTruthy()
+    })
+
+    it('warning color is yellow', async () => {
+        process.env.SLACK_HOOK = 'https://hooks.slack.com/hook'
+        nock('https://hooks.slack.com')
+            .post('/hook',
+                body => body.attachments.map(e => e.color).every(c => color_names(c).basic[0].name === 'gold'),
+                {
+                    reqheaders: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+            .reply(200)
+        const event = {level: 'warning', details: {Project: 'Ninshubur'}}
+
+        await expect(index.handler(event)).resolves.toBeTruthy()
+    })
+
+    it('error color is red', async () => {
+        process.env.SLACK_HOOK = 'https://hooks.slack.com/hook'
+        nock('https://hooks.slack.com')
+            .post('/hook',
+                body => body.attachments.map(e => e.color).every(c => color_names(c).basic[0].name === 'red'),
+                {
+                    reqheaders: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+            .reply(200)
+        const event = {level: 'error', details: {Project: 'Ninshubur'}}
+
+        await expect(index.handler(event)).resolves.toBeTruthy()
+    })
+
+    it('fatal color is brown', async () => {
+        process.env.SLACK_HOOK = 'https://hooks.slack.com/hook'
+        nock('https://hooks.slack.com')
+            .post('/hook',
+                body => body.attachments.map(e => e.color).every(c => color_names(c).basic[0].name === 'brown'),
                 {
                     reqheaders: {
                         'Content-Type': 'application/json'

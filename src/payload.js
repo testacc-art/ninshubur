@@ -16,12 +16,12 @@ const fields = details => {
     return Promise.reject('Details are required')
 }
 
-const payload = (event) => Promise.all([level.message(event.level), fields(event.details)])
-    .then(([message, fields]) => {
+const payload = (event) => Promise.all([level.message(event.level), level.color(event.level), fields(event.details)])
+    .then(([message, color, fields]) => {
         return {
             text: message,
             attachments: [{
-                color: '#11c560',
+                color: color,
                 fields: fields
             }]
         }
