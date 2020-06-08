@@ -11,7 +11,6 @@ This is still work in progress.
 
 TODO:
 * (customizable) avatar
-* (customizable) name
 * fetch lambda from S3
 * user mentions
 * extra hooks for channels
