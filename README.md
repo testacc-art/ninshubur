@@ -10,10 +10,12 @@ function that allows you to post [Slack](https://slack.com/) notifications
 This is still work in progress.
 
 TODO:
-* (customizable) avatar
-* fetch lambda from S3
-* user mentions
-* extra hooks for channels
+* MVP:
+  * (customizable) avatar
+  * fetch the lambda from S3
+* Next milestone:
+  * user mentions
+  * extra hooks for channels
 
 ## Features
 
