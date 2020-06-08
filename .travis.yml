@@ -25,7 +25,7 @@ jobs:
     provider: script
     script:
       - mkdir archive
-      - zip -rj archive/lambda.zip src/
+      - cd src && zip -r ./../archive/lambda.zip ./
     on:
       branch: master
     deploy:
