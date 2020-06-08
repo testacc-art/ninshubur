@@ -1,13 +1,23 @@
-const request = require('./request')
+const fetch = require('node-fetch')
 
-const options = hook => {
+const options = body => {
     return {
+        body: body,
         method: 'POST',
-        port: hook.port,
-        host: hook.hostname,
-        path: hook.pathname,
         headers: {'Content-Type': 'application/json'}
     }
 }
 
-exports.notify = async (hook, payload) => request.perform(options(hook), payload)
+const checkIsSuccessful = (response, body) => response.text().then(b => {
+    const message = `Slack API responded with ${response.status}: ${b}`
+    console.log(message)
+    return response.ok
+        ? Promise.resolve(`Successfully notified about ${body}`)
+        : Promise.reject(message)
+})
+
+exports.notify = (hook, payload) => {
+    const body = JSON.stringify(payload)
+    return fetch(hook, options(body))
+        .then(r => checkIsSuccessful(r, body))
+}

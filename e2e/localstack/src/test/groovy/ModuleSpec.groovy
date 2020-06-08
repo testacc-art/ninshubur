@@ -52,7 +52,7 @@ class ModuleSpec extends Specification {
         result.payload().asUtf8String() =~ 'Successfully notified'
         and:
         new PollingConditions(timeout: 10).eventually {
-            cloudWatchLogs('/aws/lambda/ninshubur').find { it.message() =~ 'Response code: 200' }
+            cloudWatchLogs('/aws/lambda/ninshubur').find { it.message() =~ 'Slack API responded with 200' }
         }
     }
 
@@ -75,7 +75,7 @@ class ModuleSpec extends Specification {
         then:
         def e = thrown LambdaException
         e.statusCode() == 500
-        e.awsErrorDetails().errorMessage() =~ 'Slack API responded with 400 code'
+        e.awsErrorDetails().errorMessage() =~ 'Slack API responded with 400'
     }
 
     List<OutputLogEvent> cloudWatchLogs(String groupName) {
@@ -112,6 +112,32 @@ class ModuleSpec extends Specification {
         then:
         apply.exitValue != 0
         apply.error.contains 'Slack hook must be a valid URL.'
+    }
+
+    def 'a user can configure Slack notification username'() {
+        given:
+        Terraform.Module.generate(slack_hook: 'https://httpbin.org/post', name: 'Geronimo', localstack.region)
+        Terraform.init()
+        and:
+        def payload = SdkBytes.fromUtf8String('{"details": {"project": "Ninshubur"}}')
+
+        when:
+        def apply = Terraform.apply()
+
+        then:
+        apply.exitValue == 0
+
+        when:
+        def result = lambda.invoke { it.functionName('ninshubur').payload(payload) }
+
+        then:
+        result.statusCode() == 200
+        !result.functionError()
+        result.payload().asUtf8String() =~ 'Successfully notified'
+        and:
+        new PollingConditions(timeout: 10).eventually {
+            cloudWatchLogs('/aws/lambda/ninshubur').find { it.message() =~ '"username": "Geronimo"' }
+        }
     }
 
     def cleanup() {

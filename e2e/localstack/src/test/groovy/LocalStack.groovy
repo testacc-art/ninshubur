@@ -1,3 +1,5 @@
+
+
 import org.testcontainers.containers.localstack.LocalStackContainer
 
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.IAM
@@ -5,9 +7,13 @@ import static org.testcontainers.containers.localstack.LocalStackContainer.Servi
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3
 
 class LocalStack {
-    final container = new LocalStackContainer('0.11.2')
-            .withServices(S3, IAM, LAMBDA)
-            .withExposedPorts(4566)
+    final LocalStackContainer container
+
+    LocalStack() {
+        container = new LocalStackContainer('0.11.2')
+                .withServices(S3, IAM, LAMBDA)
+                .withExposedPorts(4566)
+    }
 
     def start() {
         container.start()

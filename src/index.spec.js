@@ -1,13 +1,13 @@
-const nock = require('nock')
-
 const index = require('./index')
 const messages = require('./messages')
 const colors = require('./colors')
 
+const nock = require('nock')
 const color_names = require('color-namer')
 
 beforeEach(() => {
     delete process.env.SLACK_HOOK
+    delete process.env.NAME
 })
 
 describe('Main', () => {
@@ -16,6 +16,7 @@ describe('Main', () => {
         nock('https://hooks.slack.com')
             .post('/hook',
                 {
+                    username: /.+/,
                     text: /.+/,
                     attachments: [{
                         color: /#.+/,
@@ -50,7 +51,7 @@ describe('Main', () => {
             .reply(400, 'invalid_payload')
         const event = {details: {Project: 'Ninshubur'}}
 
-        await expect(index.handler(event)).rejects.toBe('Slack API responded with 400 code')
+        await expect(index.handler(event)).rejects.toBe('Slack API responded with 400: invalid_payload')
     })
 })
 
@@ -225,6 +226,73 @@ describe('Configuration', () => {
             nock('https://localhost:8443')
                 .post('/hook',
                     _ => true,
+                    {
+                        reqheaders: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                .reply(200)
+            const event = {details: {Project: 'Ninshubur'}}
+
+            await expect(index.handler(event)).resolves.toBeTruthy()
+        })
+
+        it('a user can override Slack host. port and protocol', async () => {
+            process.env.SLACK_HOOK = 'http://localhost:8080/hook'
+            nock('http://localhost:8080')
+                .post('/hook',
+                    _ => true,
+                    {
+                        reqheaders: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                .reply(200)
+            const event = {details: {Project: 'Ninshubur'}}
+
+            await expect(index.handler(event)).resolves.toBeTruthy()
+        })
+    })
+    describe("Name", () => {
+        it('has a default', async () => {
+            process.env.SLACK_HOOK = 'https://hooks.slack.com/hook'
+            nock('https://hooks.slack.com')
+                .post('/hook',
+                    body => body.username === '𒀭𒊩𒌆𒋚',
+                    {
+                        reqheaders: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                .reply(200)
+            const event = {details: {Project: 'Ninshubur'}}
+
+            await expect(index.handler(event)).resolves.toBeTruthy()
+        })
+
+        it('empty name is treated as missing', async () => {
+            process.env.SLACK_HOOK = 'https://hooks.slack.com/hook'
+            process.env.NAME = ''
+            nock('https://hooks.slack.com')
+                .post('/hook',
+                    body => body.username === '𒀭𒊩𒌆𒋚',
+                    {
+                        reqheaders: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                .reply(200)
+            const event = {details: {Project: 'Ninshubur'}}
+
+            await expect(index.handler(event)).resolves.toBeTruthy()
+        })
+
+        it('a user can specify a custom Slack notification username', async () => {
+            process.env.SLACK_HOOK = 'https://hooks.slack.com/hook'
+            process.env.NAME = 'Geronimo'
+            nock('https://hooks.slack.com')
+                .post('/hook',
+                    body => body.username === 'Geronimo',
                     {
                         reqheaders: {
                             'Content-Type': 'application/json'

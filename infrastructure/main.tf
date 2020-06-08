@@ -72,6 +72,7 @@ resource "aws_lambda_function" "_" {
   environment {
     variables = {
       SLACK_HOOK = var.slack_hook
+      NAME = var.name
     }
   }
 

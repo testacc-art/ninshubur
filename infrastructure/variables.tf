@@ -14,7 +14,7 @@ variable "slack_hook" {
   description = "Slack hook (https://hooks.slack.com/services/AAAAAAAAA/AAAAAAAAA/AAAAAAAAAAAAAAAAAAAAAAAA)"
 
   validation {
-    condition     = can(regex("^https://[a-z.]+(:[0-9]+)?(/[a-zA-Z0-9]+)+", var.slack_hook))
+    condition     = can(regex("^http(s)?://[a-z.]+(:[0-9]+)?(/[a-zA-Z0-9]+)+", var.slack_hook))
     error_message = "Slack hook must be a valid URL."
   }
 }
@@ -22,4 +22,10 @@ variable "slack_hook" {
 variable "region" {
   type = string
   description = "AWS region where Ninshubur will be deployed to"
+}
+
+variable "name" {
+  default = ""
+  type = string
+  description = "Slack username to use in notifications"
 }

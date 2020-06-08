@@ -1,4 +1,5 @@
 const level = require('./level')
+const environment = require('./environment')
 
 const fields = details => {
     if (details) {
@@ -19,6 +20,7 @@ const fields = details => {
 const payload = (event) => Promise.all([level.message(event.level), level.color(event.level), fields(event.details)])
     .then(([message, color, fields]) => {
         return {
+            username: environment.name(),
             text: message,
             attachments: [{
                 color: color,
