@@ -14,6 +14,7 @@ TODO:
   * (customizable) avatar
   * fetch the lambda from S3
   * KMS-encrypted hooks
+  * Usage documentation
 * Next milestone:
   * user mentions
   * extra hooks for channels
