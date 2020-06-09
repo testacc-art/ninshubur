@@ -1,6 +1,9 @@
 resource "aws_s3_bucket" "_" {
   bucket = "ninshubur-${var.region}"
   region = var.region
+  versioning {
+    enabled = true
+  }
 }
 
 variable "region" {
