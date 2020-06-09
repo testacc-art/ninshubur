@@ -13,6 +13,7 @@ TODO:
 * MVP:
   * (customizable) avatar
   * fetch the lambda from S3
+  * KMS-encrypted hooks
 * Next milestone:
   * user mentions
   * extra hooks for channels
