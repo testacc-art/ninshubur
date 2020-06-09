@@ -30,7 +30,7 @@ const messages = {
 }
 
 const messageLevel = (level) => level === 'warning' || level === 'fatal' ? 'error' : level
-const random = (list) => list[Math.floor(Math.random() * Math.floor(list.length))]
+const random = (list) => list[Math.floor(Math.random() * list.length)]
 
 exports.get = (level) => random(messages[messageLevel(level)])
 exports.info = () => messages.info
