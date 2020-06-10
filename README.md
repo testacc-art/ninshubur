@@ -16,6 +16,7 @@ TODO:
 * Next milestone:
   * user mentions
   * extra hooks for channels
+  * buckets in other regions
 
 ## Features
 
