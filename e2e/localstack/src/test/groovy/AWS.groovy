@@ -39,7 +39,7 @@ class AWS {
             LocalStack localstack) {
         supplier.get()
                 .credentialsProvider(credentials(localstack))
-                .region(Region.of(localstack.region))
+                .region(Region.of('eu-west-1'))
                 .endpointOverride(localstack.endpoint)
                 .build()
     }

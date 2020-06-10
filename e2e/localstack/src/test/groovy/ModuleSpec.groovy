@@ -32,7 +32,7 @@ class ModuleSpec extends Specification {
 
     def 'a user can invoke the lambda function'() {
         given:
-        Terraform.Module.generate(slack_hook: 'https://httpbin.org/post', localstack.region)
+        Terraform.Module.generate(slack_hook: 'https://httpbin.org/post', region: 'eu-west-1')
         Terraform.init()
         and:
         def payload = SdkBytes.fromUtf8String('{"details": {"project": "Ninshubur"}}')
@@ -58,7 +58,7 @@ class ModuleSpec extends Specification {
 
     def 'an unsuccessful notification fails the lambda invocation'() {
         given:
-        Terraform.Module.generate(slack_hook: 'https://httpbin.org/status/400', localstack.region)
+        Terraform.Module.generate(slack_hook: 'https://httpbin.org/status/400', region: 'eu-west-1')
         Terraform.init()
         and:
         def payload = SdkBytes.fromUtf8String('{"details": {"project": "Ninshubur"}}')
@@ -86,7 +86,7 @@ class ModuleSpec extends Specification {
     def 'a user can tag AWS resources'() {
         given:
         def tags = [foo: 'bar']
-        Terraform.Module.generate(tags: tags, slack_hook: 'https://hooks.slack.com/hook', localstack.region)
+        Terraform.Module.generate(tags: tags, slack_hook: 'https://hooks.slack.com/hook', region: 'eu-west-1')
         Terraform.init()
 
         when:
@@ -103,7 +103,7 @@ class ModuleSpec extends Specification {
 
     def 'Slack hook must be a valid URL'() {
         given:
-        Terraform.Module.generate(slack_hook: '/hook', localstack.region)
+        Terraform.Module.generate(slack_hook: '/hook', region: 'eu-west-1')
         Terraform.init()
 
         when:
@@ -116,7 +116,7 @@ class ModuleSpec extends Specification {
 
     def 'a user can configure Slack notification username'() {
         given:
-        Terraform.Module.generate(slack_hook: 'https://httpbin.org/post', name: 'Geronimo', localstack.region)
+        Terraform.Module.generate(slack_hook: 'https://httpbin.org/post', name: 'Geronimo', region: 'eu-west-1')
         Terraform.init()
         and:
         def payload = SdkBytes.fromUtf8String('{"details": {"project": "Ninshubur"}}')
@@ -142,7 +142,10 @@ class ModuleSpec extends Specification {
 
     def 'a user can configure Slack notification avatar'() {
         given:
-        Terraform.Module.generate(slack_hook: 'https://httpbin.org/post', avatar_url: 'https://google.be', localstack.region)
+        Terraform.Module.generate(
+                slack_hook: 'https://httpbin.org/post',
+                avatar_url: 'https://google.be',
+                region: 'eu-west-1')
         Terraform.init()
         and:
         def payload = SdkBytes.fromUtf8String('{"details": {"project": "Ninshubur"}}')
@@ -168,7 +171,7 @@ class ModuleSpec extends Specification {
 
     def 'Avatar URL must be a valid URL'() {
         given:
-        Terraform.Module.generate(slack_hook: 'https://httpbin.org/post', avatar_url: 'foo', localstack.region)
+        Terraform.Module.generate(slack_hook: 'https://httpbin.org/post', avatar_url: 'foo', region: 'eu-west-1')
         Terraform.init()
 
         when:
@@ -177,6 +180,19 @@ class ModuleSpec extends Specification {
         then:
         apply.exitValue != 0
         apply.error.contains 'Avatar URL must be a valid URL.'
+    }
+
+    def 'Only eu-west-1 region is supported at the moment'() {
+        given:
+        Terraform.Module.generate(slack_hook: 'https://httpbin.org/post', region: 'us-east-1')
+        Terraform.init()
+
+        when:
+        def apply = Terraform.apply()
+
+        then:
+        apply.exitValue != 0
+        apply.error.contains 'Only eu-west-1 region is supported at the moment.'
     }
 
     def cleanup() {

@@ -1,6 +1,7 @@
 resource "aws_s3_bucket" "_" {
   bucket = "ninshubur-${var.region}"
   region = var.region
+  acl = "public-read"
   versioning {
     enabled = true
   }

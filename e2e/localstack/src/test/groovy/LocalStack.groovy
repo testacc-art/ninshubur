@@ -13,6 +13,7 @@ class LocalStack {
         container = new LocalStackContainer('0.11.2')
                 .withServices(S3, IAM, LAMBDA)
                 .withExposedPorts(4566)
+                .withEnv(DEFAULT_REGION: 'eu-west-1')
     }
 
     def start() {
@@ -29,10 +30,6 @@ class LocalStack {
 
     def getSecretKey() {
         container.secretKey
-    }
-
-    def getRegion() {
-        container.region
     }
 
     URI getEndpoint() {

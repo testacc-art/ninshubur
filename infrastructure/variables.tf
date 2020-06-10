@@ -1,8 +1,3 @@
-variable "source_path" {
-  type = string
-  default = "./../src/"
-}
-
 variable "tags" {
   type = map(string)
   description = "AWS resources tags"
@@ -22,6 +17,11 @@ variable "slack_hook" {
 variable "region" {
   type = string
   description = "AWS region where Ninshubur will be deployed to"
+
+  validation {
+    condition     = var.region == "eu-west-1"
+    error_message = "Only eu-west-1 region is supported at the moment."
+  }
 }
 
 variable "name" {

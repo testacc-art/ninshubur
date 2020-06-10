@@ -63,7 +63,9 @@ resource "aws_lambda_function" "_" {
   description = "Slack notifications with a twist"
   handler = "index.handler"
 
-  filename = local.filename
+  s3_bucket = "ninshubur-${var.region}"
+  s3_key = "lambda.zip"
+  s3_object_version = var.s3_object_versions[var.region]
 
   role = aws_iam_role._.arn
 
@@ -78,14 +80,12 @@ resource "aws_lambda_function" "_" {
   }
 
   tags = var.tags
-
-  depends_on = [
-    data.archive_file.zip
-  ]
 }
 
-data "archive_file" "zip" {
-  type = "zip"
-  source_dir = var.source_path
-  output_path = local.filename
+variable "s3_object_versions" {
+  type = map(string)
+  description = "This variable is for tests only, it should not be set to anything but default"
+  default = {
+    eu-west-1: "srIypFDvF_clxSGSCi9Q87xYRYRdd9eC"
+  }
 }
