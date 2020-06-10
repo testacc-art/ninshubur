@@ -1,6 +1,6 @@
 # 𒀭𒊩𒌆𒋚 (Ninshubur) [![Build Status](https://travis-ci.org/artamonovkirill/ninshubur.svg?branch=master)](https://travis-ci.org/artamonovkirill/ninshubur)
 
-> Delivers your messages. With a twist.
+> Delivers your messages. With a twist. 
 
 [Ninshubur](https://en.wikipedia.org/wiki/Ninshubur) is a [AWS Lambda](https://aws.amazon.com/lambda/) 
 function that allows you to post [Slack](https://slack.com/) notifications
@@ -50,3 +50,13 @@ E2E test is performed with [node-lambda](https://github.com/motdotla/node-lambda
 * Create `e2e/deploy.env`
 * Put `SLACK_HOOK=...` in `e2e/deploy.env` 
 * Run `npm run e2e`
+
+## Avatar
+
+![Ninshubur avatar](ninshubur.jpg) 
+
+> This image has been extracted from another [file](https://commons.wikimedia.org/wiki/File:Seal_of_Inanna,_2350-2150_BCE.jpg): 
+>
+>"Old Akkadian cylinder seal representing the goddess Inanna / Ishtar and her sukkal Ninshubur. Akkad period, around 2334-2154 BC. J.-C. Oriental Institute of the University of Chicago." 
+> 
+> [Creative Commons](https://en.wikipedia.org/wiki/en:Creative_Commons) [Attribution 3.0 Unported](https://creativecommons.org/licenses/by/3.0/deed.en)
