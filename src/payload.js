@@ -22,6 +22,7 @@ const payload = (event) => Promise.all([level.message(event.level), level.color(
         return {
             username: environment.name(),
             text: message,
+            icon_url: environment.avatar_url(),
             attachments: [{
                 color: color,
                 fields: fields

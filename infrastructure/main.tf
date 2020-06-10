@@ -73,6 +73,7 @@ resource "aws_lambda_function" "_" {
     variables = {
       SLACK_HOOK = var.slack_hook
       NAME = var.name
+      AVATAR_URL = var.avatar_url
     }
   }
 

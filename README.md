@@ -11,7 +11,6 @@ This is still work in progress.
 
 TODO:
 * MVP:
-  * (customizable) avatar
   * fetch the lambda from S3
   * KMS-encrypted hooks
   * Usage documentation

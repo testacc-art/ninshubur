@@ -140,6 +140,45 @@ class ModuleSpec extends Specification {
         }
     }
 
+    def 'a user can configure Slack notification avatar'() {
+        given:
+        Terraform.Module.generate(slack_hook: 'https://httpbin.org/post', avatar_url: 'https://google.be', localstack.region)
+        Terraform.init()
+        and:
+        def payload = SdkBytes.fromUtf8String('{"details": {"project": "Ninshubur"}}')
+
+        when:
+        def apply = Terraform.apply()
+
+        then:
+        apply.exitValue == 0
+
+        when:
+        def result = lambda.invoke { it.functionName('ninshubur').payload(payload) }
+
+        then:
+        result.statusCode() == 200
+        !result.functionError()
+        result.payload().asUtf8String() =~ 'Successfully notified'
+        and:
+        new PollingConditions(timeout: 10).eventually {
+            cloudWatchLogs('/aws/lambda/ninshubur').find { it.message() =~ '"icon_url": "https://google.be"' }
+        }
+    }
+
+    def 'Avatar URL must be a valid URL'() {
+        given:
+        Terraform.Module.generate(slack_hook: 'https://httpbin.org/post', avatar_url: 'foo', localstack.region)
+        Terraform.init()
+
+        when:
+        def apply = Terraform.apply()
+
+        then:
+        apply.exitValue != 0
+        apply.error.contains 'Avatar URL must be a valid URL.'
+    }
+
     def cleanup() {
         localstack.stop()
     }

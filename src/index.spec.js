@@ -18,6 +18,7 @@ describe('Main', () => {
                 {
                     username: /.+/,
                     text: /.+/,
+                    icon_url: /.+/,
                     attachments: [{
                         color: /#.+/,
                         fields: [{
@@ -237,7 +238,7 @@ describe('Configuration', () => {
             await expect(index.handler(event)).resolves.toBeTruthy()
         })
 
-        it('a user can override Slack host. port and protocol', async () => {
+        it('a user can override Slack host, port and protocol', async () => {
             process.env.SLACK_HOOK = 'http://localhost:8080/hook'
             nock('http://localhost:8080')
                 .post('/hook',
@@ -253,7 +254,7 @@ describe('Configuration', () => {
             await expect(index.handler(event)).resolves.toBeTruthy()
         })
     })
-    describe("Name", () => {
+    describe('Name', () => {
         it('has a default', async () => {
             process.env.SLACK_HOOK = 'https://hooks.slack.com/hook'
             nock('https://hooks.slack.com')
@@ -293,6 +294,58 @@ describe('Configuration', () => {
             nock('https://hooks.slack.com')
                 .post('/hook',
                     body => body.username === 'Geronimo',
+                    {
+                        reqheaders: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                .reply(200)
+            const event = {details: {Project: 'Ninshubur'}}
+
+            await expect(index.handler(event)).resolves.toBeTruthy()
+        })
+    })
+
+    describe('Avatar', () => {
+        it('has a default', async () => {
+            process.env.SLACK_HOOK = 'https://hooks.slack.com/hook'
+            nock('https://hooks.slack.com')
+                .post('/hook',
+                    body => body.icon_url === 'https://raw.githubusercontent.com/artamonovkirill/ninshubur/master/ninshubur.jpg',
+                    {
+                        reqheaders: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                .reply(200)
+            const event = {details: {Project: 'Ninshubur'}}
+
+            await expect(index.handler(event)).resolves.toBeTruthy()
+        })
+
+        it('empty icon URL is treated as missing', async () => {
+            process.env.SLACK_HOOK = 'https://hooks.slack.com/hook'
+            process.env.AVATAR_URL = ''
+            nock('https://hooks.slack.com')
+                .post('/hook',
+                    body => body.icon_url === 'https://raw.githubusercontent.com/artamonovkirill/ninshubur/master/ninshubur.jpg',
+                    {
+                        reqheaders: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                .reply(200)
+            const event = {details: {Project: 'Ninshubur'}}
+
+            await expect(index.handler(event)).resolves.toBeTruthy()
+        })
+
+        it('a user can specify a custom Slack notification avatar', async () => {
+            process.env.SLACK_HOOK = 'https://hooks.slack.com/hook'
+            process.env.AVATAR_URL = 'https://google.com'
+            nock('https://hooks.slack.com')
+                .post('/hook',
+                    body => body.icon_url === 'https://google.com',
                     {
                         reqheaders: {
                             'Content-Type': 'application/json'
