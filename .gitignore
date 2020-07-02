@@ -4,7 +4,7 @@
 !.idea/codeStyles/*.*
 
 # Node
-/node_modules/
+node_modules/
 
 # Sensitive data
 e2e/node-lambda/deploy.env
@@ -15,7 +15,7 @@ e2e/localstack/provider.tf
 e2e/localstack/main.tf
 
 # Build artifacts
-/archive/
+archive/
 e2e/localstack/ninshubur.zip
 
 # Gradle

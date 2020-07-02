@@ -58,6 +58,12 @@ module "ninshubur" {
   ${variables.collect { k, v -> "$k = ${serialize(v)}" }.join('\n  ')}
 }
 
+resource "null_resource" "copy_modules" {
+  provisioner "local-exec" {
+    command = "mkdir -p ../../src/node_modules && cp -r ../../node_modules/node-fetch ../../src/node_modules/node-fetch"
+  }
+}
+
 data "archive_file" "zip" {
   type = "zip"
   source_dir = "../../src"
@@ -65,6 +71,9 @@ data "archive_file" "zip" {
 }
 
 resource "aws_s3_bucket" "storage" {
+  depends_on = [
+    null_resource.copy_modules
+  ]
   bucket = "ninshubur-${variables.region}"
   versioning {
     enabled = true

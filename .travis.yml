@@ -6,9 +6,11 @@ jobs:
     cache: npm
     install: npm ci
     script: npm run jest
-  - language: java
+  - stage: e2e
+    language: java
     jdk: openjdk14
     services: docker
+    skip_cleanup: true
     env:
       - PATH=$PATH:$HOME/tools
     before_cache:
@@ -23,7 +25,10 @@ jobs:
     script: ./gradlew build --no-daemon --max-workers 2 --scan
   - stage: deploy
     provider: script
+    skip_cleanup: true
     script:
+      - mkdir -p src/node_modules
+      - cp -r node_modules/node-fetch src/node_modules/node-fetch
       - mkdir archive
       - cd src && zip -r ./../archive/lambda.zip ./ && cd ..
     on:
