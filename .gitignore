@@ -11,12 +11,10 @@ e2e/node-lambda/deploy.env
 
 # Terraform
 .terraform/
-e2e/localstack/provider.tf
-e2e/localstack/main.tf
+e2e/localstack/*.tf
 
 # Build artifacts
 archive/
-e2e/localstack/ninshubur.zip
 
 # Gradle
 .gradle/
