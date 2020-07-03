@@ -6,14 +6,19 @@ import software.amazon.awssdk.services.cloudwatchlogs.CloudWatchLogsClient
 import software.amazon.awssdk.services.iam.IamClient
 import software.amazon.awssdk.services.lambda.LambdaClient
 import software.amazon.awssdk.services.s3.S3Client
+import spock.util.concurrent.PollingConditions
 
 import java.util.function.Supplier
 
 class AWS {
     static S3Client s3(LocalStack localstack) {
-        client(
+        def s3 = client(
                 { S3Client.builder() },
                 localstack)
+        new PollingConditions(timeout: 60).eventually {
+            s3.listBuckets()
+        }
+        s3
     }
 
     static LambdaClient lambda(LocalStack localstack) {

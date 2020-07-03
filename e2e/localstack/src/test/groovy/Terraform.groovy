@@ -1,3 +1,5 @@
+import org.junit.rules.TemporaryFolder
+
 class Terraform {
 
     static init() {
@@ -48,7 +50,7 @@ provider "aws" {
     }
 
     static class Module {
-        static generate(Map variables = [:]) {
+        static generate(Map variables = [:], TemporaryFolder tmp) {
             new File('main.tf').text = """
 module "ninshubur" {
   source = "../../infrastructure"
@@ -67,7 +69,7 @@ resource "null_resource" "copy_modules" {
 data "archive_file" "zip" {
   type = "zip"
   source_dir = "../../src"
-  output_path = "\${path.module}/ninshubur.zip"
+  output_path = "${tmp.root}/ninshubur.zip"
 }
 
 resource "aws_s3_bucket" "storage" {
