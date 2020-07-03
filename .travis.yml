@@ -8,9 +8,9 @@ jobs:
     script: npm run jest
   - stage: e2e
     language: java
+    node_js: node
     jdk: openjdk14
     services: docker
-    skip_cleanup: true
     env:
       - PATH=$PATH:$HOME/tools
     before_cache:
@@ -21,11 +21,17 @@ jobs:
         - $HOME/.gradle/caches/
         - $HOME/.gradle/wrapper/
         - $HOME/tools
-    install: ./ci/install_terraform.sh
+      npm: true
+    install:
+      - ./ci/install_terraform.sh
+      - npm ci --only=production
     script: ./gradlew build --no-daemon --max-workers 2 --scan
   - stage: deploy
     provider: script
-    skip_cleanup: true
+    cache: npm
+    node_js: node
+    install:
+      - npm ci --only=production
     script:
       - mkdir -p src/node_modules
       - cp -r node_modules/node-fetch src/node_modules/node-fetch
