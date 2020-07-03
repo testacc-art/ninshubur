@@ -67,6 +67,9 @@ resource "null_resource" "copy_modules" {
 }
 
 data "archive_file" "zip" {
+  depends_on = [
+    null_resource.copy_modules
+  ]
   type = "zip"
   source_dir = "../../src"
   output_path = "${tmp.root}/ninshubur.zip"
