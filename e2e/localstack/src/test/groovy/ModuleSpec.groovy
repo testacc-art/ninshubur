@@ -5,10 +5,11 @@ import software.amazon.awssdk.services.cloudwatchlogs.model.OutputLogEvent
 import software.amazon.awssdk.services.iam.IamClient
 import software.amazon.awssdk.services.kms.KmsClient
 import software.amazon.awssdk.services.lambda.LambdaClient
-import software.amazon.awssdk.services.lambda.model.LambdaException
 import software.amazon.awssdk.services.s3.S3Client
 import spock.lang.Specification
 import spock.util.concurrent.PollingConditions
+
+import static software.amazon.awssdk.services.lambda.model.LogType.TAIL
 
 class ModuleSpec extends Specification {
 
@@ -52,7 +53,7 @@ class ModuleSpec extends Specification {
         apply.exitValue == 0
 
         when:
-        def result = lambda.invoke { it.functionName('ninshubur').payload(payload) }
+        def result = lambda.invoke { it.functionName('ninshubur').payload(payload).logType(TAIL) }
 
         then:
         result.statusCode() == 200
@@ -80,12 +81,12 @@ class ModuleSpec extends Specification {
         apply.exitValue == 0
 
         when:
-        lambda.invoke { it.functionName('ninshubur').payload(payload) }
+        def result = lambda.invoke { it.functionName('ninshubur').payload(payload).logType(TAIL) }
 
         then:
-        def e = thrown LambdaException
-        e.statusCode() == 500
-        e.awsErrorDetails().errorMessage() =~ 'Slack API responded with 400'
+        result.statusCode() == 200
+        result.functionError() == 'Unhandled'
+        result.payload().asUtf8String() =~ 'Slack API responded with 400'
     }
 
     List<OutputLogEvent> cloudWatchLogs(String groupName) {

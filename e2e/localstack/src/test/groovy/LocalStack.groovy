@@ -1,5 +1,4 @@
 import org.testcontainers.containers.GenericContainer
-import org.testcontainers.containers.Network
 import org.testcontainers.containers.wait.strategy.Wait
 
 import static org.testcontainers.containers.Network.newNetwork
@@ -12,7 +11,7 @@ class LocalStack {
     final network = newNetwork()
 
     LocalStack() {
-        container = new GenericContainer('localstack/localstack:0.11.2')
+        container = new GenericContainer('localstack/localstack:0.11.3')
                 .withEnv(
                         SERVICES: 'kms,s3,lambda,iam',
                         DEFAULT_REGION: region,
