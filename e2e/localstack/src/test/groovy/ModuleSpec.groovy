@@ -5,7 +5,6 @@ import software.amazon.awssdk.services.cloudwatchlogs.model.OutputLogEvent
 import software.amazon.awssdk.services.iam.IamClient
 import software.amazon.awssdk.services.kms.KmsClient
 import software.amazon.awssdk.services.lambda.LambdaClient
-import software.amazon.awssdk.services.s3.S3Client
 import spock.lang.Specification
 import spock.util.concurrent.PollingConditions
 
@@ -26,7 +25,7 @@ class ModuleSpec extends Specification {
         localstack.start()
         tmp.create()
 
-        S3Client s3 = AWS.s3(localstack)
+        def s3 = AWS.s3(localstack)
         s3.createBucket { it.bucket(stateBucket) }
 
         Terraform.Provider.generate(localstack, stateBucket)
