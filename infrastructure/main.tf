@@ -1,12 +1,5 @@
-terraform {
-  experiments = [
-    variable_validation
-  ]
-}
-
 locals {
   name = "ninshubur"
-  filename = "${local.name}.zip"
   log_group = "/aws/lambda/${local.name}"
 }
 
