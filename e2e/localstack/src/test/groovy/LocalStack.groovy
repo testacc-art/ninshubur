@@ -1,6 +1,7 @@
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.wait.strategy.Wait
 
+import static java.lang.System.err
 import static org.testcontainers.containers.Network.newNetwork
 
 class LocalStack {
@@ -26,7 +27,13 @@ class LocalStack {
     }
 
     def start() {
-        container.start()
+        try {
+            container.start()
+        } catch (Exception e) {
+            err.println 'LocalStack failed to start'
+            err.println container.logs
+            throw e
+        }
     }
 
     def stop() {
