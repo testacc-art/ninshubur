@@ -2,10 +2,7 @@
   "extends": [
     "config:base"
   ],
-  "packageRules": [
-    {
-      "automerge": true,
-      "automergeType": "branch"
-    }
-  ]
+  "automerge": true,
+  "automergeType": "branch",
+  "commitMessagePrefix": ":arrow_up:"
 }
