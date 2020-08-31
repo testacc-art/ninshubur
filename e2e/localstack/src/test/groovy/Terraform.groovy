@@ -27,10 +27,6 @@ terraform {
     secret_key = "${localstack.secretKey}"
     skip_credentials_validation = true
   }
-  
-  required_providers {
-    aws = "2.70.0" # https://github.com/terraform-providers/terraform-provider-aws/issues/14427
-  } 
 }
 
 provider "aws" {
