@@ -17,7 +17,7 @@
     "fast-check": "2.6.0",
     "jest": "26.6.1",
     "nock": "13.0.4",
-    "testcontainers": "4.6.0"
+    "testcontainers": "4.7.0"
   },
   "scripts": {
     "jest": "jest src/*.spec.js",
