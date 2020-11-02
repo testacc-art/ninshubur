@@ -15,7 +15,7 @@
     "@types/jest": "26.0.15",
     "color-namer": "1.4.0",
     "fast-check": "2.6.0",
-    "jest": "26.6.1",
+    "jest": "26.6.2",
     "nock": "13.0.4",
     "testcontainers": "5.0.0"
   },
