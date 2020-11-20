@@ -5,18 +5,6 @@
 [Ninshubur](https://en.wikipedia.org/wiki/Ninshubur) is an [AWS Lambda](https://aws.amazon.com/lambda/) 
 function that allows you to post [Slack](https://slack.com/) notifications
 
-## NB!
-
-This is still work in progress.
-
-Backlog:
-* MVP:
-  * Usage documentation
-* Next milestone:
-  * user mentions
-  * extra hooks for channels
-  * buckets in other regions
-
 ## Features
 
 * Severity levels expressed by colors:
@@ -28,6 +16,7 @@ Backlog:
 * Random quotes from movies and games to add a bit of fun.
 * The name and avatar are configurable.
 * Deployable with terraform.
+* Requires Terraform 0.13+
 
 ## Building a project
 
@@ -48,6 +37,14 @@ E2E test is performed with [node-lambda](https://github.com/motdotla/node-lambda
 * Create `e2e/deploy.env`
 * Put `SLACK_HOOK=...` in `e2e/deploy.env` 
 * Run `npm run e2e`
+
+## Backlog:
+* MVP:
+  * Usage documentation
+* Next milestone:
+  * user mentions
+  * extra hooks for channels
+  * buckets in other regions
 
 ## Avatar
 
