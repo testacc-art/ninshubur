@@ -9,7 +9,7 @@ exports.start = async () => {
 
     process.env.AWS_REGION = 'us-east-1'
 
-    container = await new GenericContainer('localstack/localstack-light', '0.11.2')
+    container = await new GenericContainer('localstack/localstack-light', '0.12.2')
         .withExposedPorts(4566)
         .withWaitStrategy(Wait.forLogMessage('Ready.'))
         .withEnv('SERVICES', 'kms')
