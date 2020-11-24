@@ -30,6 +30,7 @@ terraform {
 }
 
 provider "aws" {
+  version = "2.70.0"
   endpoints {
     iam = "${localstack.endpoint}"
     lambda = "${localstack.endpoint}"
@@ -46,6 +47,14 @@ provider "aws" {
   skip_requesting_account_id = true
    
   s3_force_path_style = true
+}
+
+provider "null" {
+  version = "2.1.2"
+}
+
+provider "archive" {
+  version = "1.3.0"
 }"""
         }
     }
