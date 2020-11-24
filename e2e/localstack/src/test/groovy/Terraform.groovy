@@ -30,7 +30,7 @@ terraform {
 }
 
 provider "aws" {
-  version = "2.70.0"
+  version = "3.16.0"
   endpoints {
     iam = "${localstack.endpoint}"
     lambda = "${localstack.endpoint}"
@@ -50,11 +50,11 @@ provider "aws" {
 }
 
 provider "null" {
-  version = "2.1.2"
+  version = "3.0.0"
 }
 
 provider "archive" {
-  version = "1.3.0"
+  version = "2.0.0"
 }"""
         }
     }
