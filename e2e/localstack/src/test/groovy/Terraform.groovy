@@ -30,7 +30,7 @@ terraform {
 }
 
 provider "aws" {
-  version = "3.16.0"
+  version = "3.16.0" // https://github.com/localstack/localstack/issues/3270
   endpoints {
     iam = "${localstack.endpoint}"
     lambda = "${localstack.endpoint}"
