@@ -1,8 +1,8 @@
-name: test
+name: CI
 on:
   - push
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -14,3 +14,11 @@ jobs:
       - run: npm run jest
         env:
           CI: true
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo terraform tests
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo deploy
