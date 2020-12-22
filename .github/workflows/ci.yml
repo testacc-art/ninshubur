@@ -6,12 +6,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: node
+      - name: Install Node
         uses: actions/setup-node@v2
         with:
           node-version: '12.x'
-      - run: npm ci
-      - run: npm run jest
+      - name: Install npm dependencies
+        run: npm ci
+      - name: Test
+        run: npm run jest
         env:
           CI: true
       - name: Install Java
@@ -22,13 +24,13 @@ jobs:
         uses: little-core-labs/install-terraform@v2.0.0
         with:
           version: 0.14.2
-      - name: Cache
+      - name: Gradle cache
         uses: actions/cache@v2
         with:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
-      - name: Gradle
+      - name: Test E2E
         run: ./gradlew build --no-daemon --max-workers 2 --scan
   deploy:
     needs: test
