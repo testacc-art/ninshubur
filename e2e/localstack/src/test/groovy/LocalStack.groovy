@@ -17,7 +17,8 @@ class LocalStack {
                         SERVICES: 'kms,s3,lambda,iam',
                         DEFAULT_REGION: region,
                         LAMBDA_EXECUTOR: 'docker',
-                        LAMBDA_DOCKER_NETWORK: network.id)
+                        LAMBDA_DOCKER_NETWORK: network.id,
+                        LAMBDA_REMOTE_DOCKER: 'true') // https://github.com/localstack/localstack/issues/3185
                 .withNetwork(network)
                 .withNetworkAliases('localstack')
                 .withExposedPorts(4566)
