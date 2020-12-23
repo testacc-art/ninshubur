@@ -15,6 +15,12 @@ class Terraform {
         static generate(LocalStack localstack, String stateBucket) {
             new File('provider.tf').text = """
 terraform {
+  required_providers {
+    aws = "3.16.0" // https://github.com/localstack/localstack/issues/3270
+    null = "3.0.0"
+    archive = "2.0.0"
+  }
+
   backend "s3" {
     bucket = "${stateBucket}"
     key = "terraform.tfstate"
@@ -30,7 +36,6 @@ terraform {
 }
 
 provider "aws" {
-  version = "3.16.0" // https://github.com/localstack/localstack/issues/3270
   endpoints {
     iam = "${localstack.endpoint}"
     lambda = "${localstack.endpoint}"
@@ -50,11 +55,9 @@ provider "aws" {
 }
 
 provider "null" {
-  version = "3.0.0"
 }
 
 provider "archive" {
-  version = "2.0.0"
 }"""
         }
     }
