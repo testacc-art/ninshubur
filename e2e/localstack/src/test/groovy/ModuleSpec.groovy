@@ -5,6 +5,7 @@ import software.amazon.awssdk.services.cloudwatchlogs.model.OutputLogEvent
 import software.amazon.awssdk.services.iam.IamClient
 import software.amazon.awssdk.services.kms.KmsClient
 import software.amazon.awssdk.services.lambda.LambdaClient
+import software.amazon.awssdk.services.lambda.model.InvokeResponse
 import spock.lang.Specification
 import spock.util.concurrent.PollingConditions
 
@@ -20,6 +21,7 @@ class ModuleSpec extends Specification {
     IamClient iam
     CloudWatchLogsClient cloudWatchLogs
     KmsClient kms
+    InvokeResponse result
 
     def setup() {
         localstack.start()
@@ -52,7 +54,7 @@ class ModuleSpec extends Specification {
         apply.exitValue == 0
 
         when:
-        def result = lambda.invoke { it.functionName('ninshubur').payload(payload).logType(TAIL) }
+        result = lambda.invoke { it.functionName('ninshubur').payload(payload).logType(TAIL) }
 
         then:
         result.statusCode() == 200
@@ -80,7 +82,7 @@ class ModuleSpec extends Specification {
         apply.exitValue == 0
 
         when:
-        def result = lambda.invoke { it.functionName('ninshubur').payload(payload).logType(TAIL) }
+        result = lambda.invoke { it.functionName('ninshubur').payload(payload).logType(TAIL) }
 
         then:
         result.statusCode() == 200
@@ -146,7 +148,7 @@ class ModuleSpec extends Specification {
         apply.exitValue == 0
 
         when:
-        def result = lambda.invoke { it.functionName('ninshubur').payload(payload) }
+        result = lambda.invoke { it.functionName('ninshubur').payload(payload) }
 
         then:
         result.statusCode() == 200
@@ -175,7 +177,7 @@ class ModuleSpec extends Specification {
         apply.exitValue == 0
 
         when:
-        def result = lambda.invoke { it.functionName('ninshubur').payload(payload) }
+        result = lambda.invoke { it.functionName('ninshubur').payload(payload) }
 
         then:
         result.statusCode() == 200
@@ -239,7 +241,7 @@ class ModuleSpec extends Specification {
         apply.exitValue == 0
 
         when:
-        def result = lambda.invoke { it.functionName('ninshubur').payload(payload) }
+        result = lambda.invoke { it.functionName('ninshubur').payload(payload) }
 
         then:
         result.statusCode() == 200
@@ -252,6 +254,7 @@ class ModuleSpec extends Specification {
     }
 
     def cleanup() {
+        if (result) print "Invocation payload: $result"
         localstack.stop()
         tmp.delete()
     }
