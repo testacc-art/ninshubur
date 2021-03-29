@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "node-fetch": "2.6.1",
-    "aws-sdk": "2.874.0"
+    "aws-sdk": "2.875.0"
   },
   "devDependencies": {
     "@types/jest": "26.0.22",
