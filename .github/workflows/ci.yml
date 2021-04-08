@@ -19,7 +19,7 @@ jobs:
       - name: Install Java
         uses: actions/setup-java@v2
         with:
-          java-version: 16
+          java-version: 15
           distribution: 'adopt'
       - name: Install Terraform
         uses: little-core-labs/install-terraform@v2.0.0
