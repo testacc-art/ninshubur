@@ -8,7 +8,7 @@
     "url": "https://github.com/artamonovkirill/ninshubur"
   },
   "dependencies": {
-    "aws-sdk": "2.922.0",
+    "aws-sdk": "2.923.0",
     "node-fetch": "2.6.1"
   },
   "devDependencies": {
