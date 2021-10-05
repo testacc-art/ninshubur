@@ -39,8 +39,6 @@ jobs:
       - run: npm ci --production
       - name: copy fetch
         run: |
-          mkdir -p src/node_modules
-          cp -r node_modules/node-fetch src/node_modules/node-fetch
           mkdir archive
           cd src && zip -r ./../archive/lambda.zip ./ && cd ..
       - uses: aws-actions/configure-aws-credentials@v1
