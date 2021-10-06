@@ -6,7 +6,7 @@ let keyId
 beforeAll(async () => {
     await localstack.start()
     keyId = await kms.createKey()
-}, 50000)
+}, 50_000)
 
 describe('KMS', () => {
     it('decryption is the reverse of encryption',  async () => {
@@ -15,7 +15,7 @@ describe('KMS', () => {
             const decrypted = await kms.decrypt(encrypted, keyId)
             expect(decrypted).toEqual(hook)
         }))
-    })
+    }, 10_000)
     test.each(['https://httpbin.org/post', 'https://hooks.slack.com/hook'])('encrypted %s is base64-encoded', async hook => {
         const result = kms.encrypt(hook, keyId)
 

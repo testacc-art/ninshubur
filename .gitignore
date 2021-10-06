@@ -12,6 +12,7 @@ e2e/node-lambda/deploy.env
 # Terraform
 .terraform/
 e2e/localstack/*.tf
+e2e/localstack/.terraform.lock.hcl
 
 # Build artifacts
 archive/
