@@ -254,7 +254,12 @@ class ModuleSpec extends Specification {
     }
 
     def cleanup() {
-        if (result) print "Invocation payload: $result"
+        if (result) {
+            println "Invocation payload: $result"
+            if (result.functionError())
+                println 'CloudWatch logs:'
+                cloudWatchLogs('/aws/lambda/ninshubur').each { println(' - ' + it)}
+        }
         localstack.stop()
         tmp.delete()
     }

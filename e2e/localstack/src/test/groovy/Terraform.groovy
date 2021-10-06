@@ -16,9 +16,9 @@ class Terraform {
             new File('provider.tf').text = """
 terraform {
   required_providers {
-    aws = "3.22.0" // https://github.com/localstack/localstack/issues/3270
-    null = "3.0.0"
-    archive = "2.0.0"
+    aws = "3.61.0"
+    null = "3.1.0"
+    archive = "2.2.0"
   }
 
   backend "s3" {
