@@ -15,7 +15,7 @@ describe('KMS', () => {
             const decrypted = await kms.decrypt(encrypted, keyId)
             expect(decrypted).toEqual(hook)
         }))
-    }, 10_000)
+    }, 20_000)
     test.each(['https://httpbin.org/post', 'https://hooks.slack.com/hook'])('encrypted %s is base64-encoded', async hook => {
         const result = kms.encrypt(hook, keyId)
 
