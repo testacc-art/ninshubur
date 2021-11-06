@@ -16,7 +16,7 @@
     "fast-check": "2.19.0",
     "jest": "27.3.1",
     "nock": "13.1.4",
-    "testcontainers": "7.21.0",
+    "testcontainers": "7.22.0",
     "ssh2": "1.5.0"
   },
   "scripts": {
