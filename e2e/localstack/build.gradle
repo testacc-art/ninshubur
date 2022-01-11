@@ -4,7 +4,7 @@ dependencies {
     testImplementation 'org.testcontainers:localstack:1.16.2'
     testImplementation 'com.amazonaws:aws-java-sdk:1.12.137'
 
-    testImplementation platform('software.amazon.awssdk:bom:2.17.107')
+    testImplementation platform('software.amazon.awssdk:bom:2.17.108')
     testImplementation 'software.amazon.awssdk:cloudwatchlogs'
     testImplementation 'software.amazon.awssdk:lambda'
     testImplementation 'software.amazon.awssdk:iam'
