@@ -1,17 +1,21 @@
 import java.util.function.Consumer
 
 class Process {
-    static run(String command) {
+    static class Result {
+        int exitValue
+        String error
+    }
+
+    static Result run(String command) {
         def process = Runtime.runtime.exec(command)
 
-        def out = join(process.inputStream, System.out.&println)
         def error = join(process.errorStream, System.err.&println)
 
         process.waitFor()
-        [exitValue: process.exitValue(), out: out, error: error]
+        new Result(exitValue: process.exitValue(), error: error)
     }
 
-    private static join(InputStream stream, Consumer<String> logger) {
+    private static String join(InputStream stream, Consumer<String> logger) {
         def logs = []
         def bufferedReader = new BufferedReader(new InputStreamReader(stream))
         String line
@@ -19,6 +23,6 @@ class Process {
             logger(line)
             logs << line
         }
-        logs
+        logs.join('\n')
     }
 }
