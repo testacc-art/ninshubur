@@ -386,7 +386,7 @@ describe('Configuration', () => {
             const event = {details: {Project: 'Ninshubur'}}
 
             await expect(index.handler(event)).resolves.toBeTruthy()
-        }, 50000)
+        }, 100_000)
     })
 })
 
