@@ -8,7 +8,7 @@
     "url": "https://github.com/artamonovkirill/ninshubur"
   },
   "dependencies": {
-    "aws-sdk": "2.1079.0"
+    "aws-sdk": "2.1080.0"
   },
   "devDependencies": {
     "@types/jest": "27.4.1",
