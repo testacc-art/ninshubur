@@ -11,7 +11,7 @@
     "aws-sdk": "2.1079.0"
   },
   "devDependencies": {
-    "@types/jest": "27.4.0",
+    "@types/jest": "27.4.1",
     "color-namer": "1.4.0",
     "fast-check": "2.22.0",
     "jest": "27.5.1",
