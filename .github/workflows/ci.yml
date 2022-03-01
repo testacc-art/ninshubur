@@ -24,6 +24,8 @@ jobs:
         with:
           version: 1.1.4
       - run: ./gradlew build --no-daemon --max-workers 2 --scan
+      - run: cp -r /opt/hostedtoolcache /home/runner/.gradle/caches
+
   deploy:
     needs: test
     if: ${{ github.ref == 'refs/heads/main' }}
