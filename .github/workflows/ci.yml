@@ -14,6 +14,7 @@ jobs:
       - run: npm run jest
         env:
           CI: true
+      - run: node -e "const os = require('os');console.log(os.homedir())"
       - uses: dmitry-shibanov/setup-java@v-dmshib/fix-issue-with-buffer
         with:
           java-version: 17
