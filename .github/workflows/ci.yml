@@ -15,7 +15,7 @@ jobs:
         env:
           CI: true
       - run: node -e "const os = require('os');console.log(os.homedir())"
-      - uses: dmitry-shibanov/setup-java@v-dmshib/fix-issue-with-buffer
+      - uses: dmitry-shibanov/setup-java@v-dmshib/test-issue-buffer
         with:
           java-version: 17
           distribution: adopt
